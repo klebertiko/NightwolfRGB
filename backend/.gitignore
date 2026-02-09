@@ -1,0 +1,43 @@
+# Backend-Specific Ignores
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+*.tsbuildinfo
+*.js
+*.js.map
+!jest.config.js
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Profiles (user-generated)
+profiles/*.json
+!profiles/README.md
+
+# Database
+data/
+*.sqlite
+*.sqlite3
+*.db
+
+# Testing
+coverage/
+.nyc_output/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

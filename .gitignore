@@ -1,0 +1,123 @@
+# === Dependencies ===
+node_modules/
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# === Build Outputs ===
+dist/
+build/
+*.tsbuildinfo
+*.js.map
+
+# === Environment & Secrets ===
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+*.key
+*.pem
+*.crt
+secrets/
+config/local.json
+
+# === Logs ===
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# === OS-Specific ===
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+
+# === IDEs & Editors ===
+# VSCode
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+*.code-workspace
+
+# JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# === Testing & Coverage ===
+coverage/
+*.lcov
+.nyc_output/
+test-results/
+playwright-report/
+
+# === Temporary Files ===
+tmp/
+temp/
+*.tmp
+*.cache
+
+# === OpenRGB Binaries (Large files - download separately) ===
+# Do NOT commit the OpenRGB executables
+bin/OpenRGB/*.exe
+bin/OpenRGB/*.dll
+bin/OpenRGB/*.so
+bin/OpenRGB/*.dylib
+# Keep the directory structure with a README
+!bin/OpenRGB/README.md
+
+# === Database Files ===
+*.sqlite
+*.sqlite3
+*.db
+data/local/
+profiles/*.json
+!profiles/README.md
+
+# === TypeScript ===
+*.tsbuildinfo
+
+# === Misc ===
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+.vuepress/dist/
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+.vscode-test
+
+# === User-specific runtime files ===
+# Allow tracking of example/template configs
+*.local.*
+local/
