@@ -108,6 +108,7 @@
             font-weight: 700;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             display: flex;
             align-items: center;
@@ -133,33 +134,43 @@
 
         /* Hero */
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             position: relative;
-            padding-top: 80px;
-            background: radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.15), transparent 40%),
-                radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.15), transparent 40%);
+            padding-top: 100px;
+            padding-bottom: 50px;
+            background: radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1), transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.1), transparent 40%);
+            overflow: hidden;
+        }
+
+        .hero .container {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
         }
 
         .hero-content {
-            max-width: 700px;
-            z-index: 1;
+            flex: 1.2;
+            z-index: 2;
         }
 
         .hero h1 {
-            font-size: 4rem;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            line-height: 1;
+            margin-bottom: 2rem;
             background: linear-gradient(135deg, #fff 0%, #aaa 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero p {
-            font-size: 1.25rem;
+            font-size: clamp(1rem, 2vw, 1.25rem);
             color: var(--text-dim);
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
         }
 
         .cta-group {
@@ -203,20 +214,18 @@
 
         /* Visual Element (Hero PC) */
         .hero-visual {
-            position: absolute;
-            right: -10%;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 60%;
-            height: 80%;
-            background: linear-gradient(45deg, var(--bg-card), transparent);
+            flex: 1;
+            position: relative;
+            aspect-ratio: 16/10;
+            background: var(--bg-card);
             border-radius: 24px;
             border: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 100px rgba(0, 0, 0, 0.5);
+            z-index: 1;
         }
 
         .hero-visual::before {
@@ -445,22 +454,42 @@
         }
 
         /* Responsive */
-        @media (max-width: 968px) {
-            .hero h1 {
-                font-size: 3rem;
+        @media (max-width: 1024px) {
+            .hero .container {
+                flex-direction: column;
+                text-align: center;
+                gap: 3rem;
+                padding-top: 60px;
+            }
+
+            .hero-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-group {
+                justify-content: center;
             }
 
             .hero-visual {
+                width: 100%;
+                max-width: 600px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
                 display: none;
             }
 
             .cleanup-content {
                 flex-direction: column;
                 text-align: center;
-            }
-
-            .nav-links {
-                display: none;
             }
         }
     </style>
