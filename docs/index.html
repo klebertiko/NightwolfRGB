@@ -506,7 +506,8 @@
             <div class="nav-links">
                 <a href="#features">Features</a>
                 <a href="#cleanup">RGB Cleanup</a>
-                <a href="https://github.com/klebertiko/NightwolfRGB#-documentation">Docs</a>
+                <a href="#quick-start">Quick Start</a>
+                <a href="../HOW_IT_WORKS.md">Docs</a>
                 <a href="https://github.com/klebertiko/NightwolfRGB" class="btn btn-secondary"
                     style="padding: 0.5rem 1rem;">GitHub</a>
             </div>
@@ -520,7 +521,7 @@
                 <p data-reveal>The ultimate professional interface for OpenRGB. Synchronize all your components, manage
                     profiles, and eliminate software conflicts with one click.</p>
                 <div class="cta-group" data-reveal>
-                    <a href="https://github.com/klebertiko/NightwolfRGB#-quick-start" class="btn btn-primary">
+                    <a href="#quick-start" class="btn btn-primary">
                         <i data-lucide="zap"></i> Get Started
                     </a>
                     <a href="#features" class="btn btn-secondary">Explore Features</a>
@@ -597,6 +598,34 @@
         </div>
     </section>
 
+    <section id="quick-start" class="section container">
+        <div class="section-header" data-reveal>
+            <h2>Quick Start Guide</h2>
+            <p>Get your lighting synchronized in under 5 minutes. No complex configuration required.</p>
+        </div>
+
+        <div class="feature-grid">
+            <div class="feature-card" data-reveal>
+                <div class="feature-icon" style="background: rgba(6, 182, 212, 0.1); color: var(--secondary);">1</div>
+                <h3>Download OpenRGB</h3>
+                <p>Install <a href="https://openrgb.org" target="_blank" style="color: var(--secondary);">OpenRGB</a>
+                    and start the SDK Server on port 6742. This is the core driver Nightwolf communicates with.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+                <div class="feature-icon" style="background: rgba(6, 182, 212, 0.1); color: var(--secondary);">2</div>
+                <h3>Init Workspace</h3>
+                <p>Clone the repository and install dependencies using <code>npm install</code> in both
+                    <code>backend/</code> and <code>frontend/</code> directories.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+                <div class="feature-icon" style="background: rgba(6, 182, 212, 0.1); color: var(--secondary);">3</div>
+                <h3>Launch & Sync</h3>
+                <p>Run <code>npm run dev</code> from the root. Open the dashboard, click "Cleanup" to remove conflicts,
+                    and enjoy universal control!</p>
+            </div>
+        </div>
+    </section>
+
     <section id="cleanup" class="cleanup-section">
         <div class="container">
             <div class="cleanup-content">
@@ -662,11 +691,6 @@
                 <div class="footer-info">
                     <p>&copy; 2026 Nightwolf RGB. Licensed under MIT.</p>
                     <p style="font-size: 0.8rem; margin-top: 0.5rem;">Designed for OpenRGB compatibility.</p>
-                </div>
-                <div class="social-links">
-                    <a href="#"><i data-lucide="twitter"></i></a>
-                    <a href="#"><i data-lucide="github"></i></a>
-                    <a href="#"><i data-lucide="message-square"></i></a>
                 </div>
             </div>
         </div>
