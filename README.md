@@ -121,7 +121,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/nightwolf-rgb.git
+git clone https://github.com/klebertiko/NightwolfRGB.git
 cd nightwolf-rgb
 
 # Install backend dependencies
