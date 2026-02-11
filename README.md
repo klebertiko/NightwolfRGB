@@ -551,8 +551,8 @@ npm run dev
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/nightwolf-rgb/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/nightwolf-rgb/discussions)
+- **Issues**: [GitHub Issues](https://github.com/klebertiko/NightwolfRGB/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/klebertiko/NightwolfRGB/discussions)
 - **Discord**: [Join our server](#) (Coming soon)
 - **Email**: support@nightwolf-rgb.com
 
@@ -562,6 +562,6 @@ npm run dev
 
 **Made with ❤️ and RGB**
 
-[⬆ Back to Top](#-nightw olf-rgb---professional-rgb-control-software)
+[⬆ Back to Top](#-nightwolf-rgb---professional-rgb-control-software)
 
 </div>
