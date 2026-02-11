@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nightwolf RGB | The Ultimate RGB Control Interface</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Master your PC's lighting with Nightwolf RGB. A premium, open-source interface for OpenRGB featuring real-time control, profile management, and the exclusive RGB Cleanup tool.">
+    <meta name="keywords"
+        content="RGB Control, OpenRGB, Nightwolf RGB, PC Lighting, Gaming PC, RGB Sync, RGB Cleanup, iCUE Alternative, Armoury Crate Alternative">
+    <meta name="author" content="Nightwolf RGB Team">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourusername.github.io/NightwolfRGB/">
+    <meta property="og:title" content="Nightwolf RGB | The Ultimate RGB Control Interface">
+    <meta property="og:description"
+        content="Master your PC's lighting with Nightwolf RGB. Premium, fast, and open-source.">
+    <meta property="og:image" content="https://yourusername.github.io/NightwolfRGB/images/social-preview.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yourusername.github.io/NightwolfRGB/">
+    <meta property="twitter:title" content="Nightwolf RGB | The Ultimate RGB Control Interface">
+    <meta property="twitter:description"
+        content="Master your PC's lighting with Nightwolf RGB. Premium, fast, and open-source.">
+    <meta property="twitter:image" content="https://yourusername.github.io/NightwolfRGB/images/social-preview.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --bg-card: rgba(15, 15, 15, 0.8);
+            --primary: #8b5cf6;
+            /* Violet */
+            --secondary: #06b6d4;
+            /* Cyan */
+            --accent: #f43f5e;
+            /* Rose */
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --neon-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 0;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: 80px;
+            background: radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.15), transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.15), transparent 40%);
+        }
+
+        .hero-content {
+            max-width: 700px;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: var(--neon-shadow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--text-dim);
+        }
+
+        /* Visual Element (Hero PC) */
+        .hero-visual {
+            position: absolute;
+            right: -10%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60%;
+            height: 80%;
+            background: linear-gradient(45deg, var(--bg-card), transparent);
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-visual::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(139, 92, 246, 0.05) 1px, rgba(139, 92, 246, 0.05) 2px);
+            animation: scan 10s linear infinite;
+        }
+
+        @keyframes scan {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-50%);
+            }
+        }
+
+        /* Features */
+        .section {
+            padding: 8rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .feature-card p {
+            color: var(--text-dim);
+        }
+
+        /* Cleanup Section */
+        .cleanup-section {
+            background: linear-gradient(180deg, var(--bg-dark), #0a0a0d, var(--bg-dark));
+            padding: 10rem 0;
+            position: relative;
+        }
+
+        .cleanup-content {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .cleanup-text {
+            flex: 1;
+        }
+
+        .cleanup-visual {
+            flex: 1;
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid rgba(244, 63, 94, 0.2);
+            padding: 2rem;
+            font-family: 'Courier New', Courier, monospace;
+            box-shadow: 0 0 50px rgba(244, 63, 94, 0.1);
+        }
+
+        .terminal-header {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .red {
+            background: #ff5f56;
+        }
+
+        .yellow {
+            background: #ffbd2e;
+        }
+
+        .green {
+            background: #27c93f;
+        }
+
+        .terminal-line {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .cleanup-highlight {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Stats/Trust */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 4rem 0;
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        /* Call to Action */
+        .cta-final {
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.1), transparent 70%);
+            border-radius: 32px;
+            padding: 6rem 2rem;
+            margin-bottom: 8rem;
+        }
+
+        .cta-final h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 0;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-dim);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            color: var(--text-dim);
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: white;
+        }
+
+        /* Animations */
+        [data-reveal] {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        [data-reveal].active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .cleanup-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="container">
+            <div class="brand">
+                <i data-lucide="zap"></i> Nightwolf RGB
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#cleanup">RGB Cleanup</a>
+                <a href="#how-it-works">Docs</a>
+                <a href="https://github.com/yourusername/nightwolf-rgb" class="btn btn-secondary"
+                    style="padding: 0.5rem 1rem;">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 data-reveal>Take Control of Your RGB Domain</h1>
+                <p data-reveal>The ultimate professional interface for OpenRGB. Synchronize all your components, manage
+                    profiles, and eliminate software conflicts with one click.</p>
+                <div class="cta-group" data-reveal>
+                    <a href="https://github.com/yourusername/nightwolf-rgb" class="btn btn-primary">
+                        <i data-lucide="download"></i> Get Started
+                    </a>
+                    <a href="#features" class="btn btn-secondary">Explore Features</a>
+                </div>
+            </div>
+            <div class="hero-visual" data-reveal>
+                <div style="text-align: center; opacity: 0.5;">
+                    <i data-lucide="monitor" size="120" stroke-width="1"></i>
+                    <p style="font-family: 'Orbitron'; margin-top: 1rem;">NIGHTWOLF v1.0 ONLINE</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="container stats" data-reveal>
+        <div class="stat-item">
+            <span class="stat-value">70+</span>
+            <span class="stat-label">Processes Detected</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value">100%</span>
+            <span class="stat-label">Open Source</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value">0ms</span>
+            <span class="stat-label">Latency Control</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value">FREE</span>
+            <span class="stat-label">Forever</span>
+        </div>
+    </section>
+
+    <section id="features" class="section container">
+        <div class="section-header" data-reveal>
+            <h2>Elite Features</h2>
+            <p>Designed for enthusiasts who demand performance and aesthetics without the bloat of manufacturer
+                software.</p>
+        </div>
+
+        <div class="feature-grid">
+            <div class="feature-card" data-reveal>
+                <div class="feature-icon"><i data-lucide="layers"></i></div>
+                <h3>Universal Sync</h3>
+                <p>Synchronize Motherboards, RAM, GPUs, and LED strips from different brands in one unified interface.
+                </p>
+            </div>
+            <div class="feature-card" data-reveal>
+                <div class="feature-icon"><i data-lucide="save"></i></div>
+                <h3>Profile Snapshots</h3>
+                <p>Save unlimited lighting configurations and switch between them instantly with zero hardware delay.
+                </p>
+            </div>
+            <div class="feature-card" data-reveal>
+                <div class="feature-icon"><i data-lucide="cpu"></i></div>
+                <h3>Hardware Native</h3>
+                <p>Access direct hardware modes for maximum responsiveness and smooth animations.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+                <div class="feature-icon"><i data-lucide="globe"></i></div>
+                <h3>Web-Based Control</h3>
+                <p>Control your PC's lighting from your smartphone or any device on your local network via browser.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+                <div class="feature-icon"><i data-lucide="code-2"></i></div>
+                <h3>Developer Friendly</h3>
+                <p>Full REST API and WebSocket support for custom integrations and third-party app development.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+                <div class="feature-icon"><i data-lucide="shield-check"></i></div>
+                <h3>Privacy First</h3>
+                <p>No telemetry, no account required, and no background tracking. Just pure RGB control.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="cleanup" class="cleanup-section">
+        <div class="container">
+            <div class="cleanup-content">
+                <div class="cleanup-text" data-reveal>
+                    <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">The <span style="color: var(--accent);">RGB
+                            Cleanup</span></h2>
+                    <p style="font-size: 1.2rem; margin-bottom: 2rem;">Tired of iCUE, Armoury Crate, and Razer Synapse
+                        fighting for control? Nightwolf's exclusive Cleanup tool identifies and terminates over 70
+                        conflicting background processes safely.</p>
+                    <ul style="list-style: none; margin-bottom: 2.5rem;">
+                        <li style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                            <i data-lucide="check-circle-2" style="color: var(--accent);"></i>
+                            Eliminate "Rainbow Vomit" caused by software conflicts
+                        </li>
+                        <li style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                            <i data-lucide="check-circle-2" style="color: var(--accent);"></i>
+                            Free up system RAM used by manufacturer bloatware
+                        </li>
+                        <li style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                            <i data-lucide="check-circle-2" style="color: var(--accent);"></i>
+                            Restore full control to OpenRGB instantly
+                        </li>
+                    </ul>
+                    <a href="https://github.com/yourusername/nightwolf-rgb" class="btn btn-secondary">Learn more about
+                        Cleanup</a>
+                </div>
+                <div class="cleanup-visual" data-reveal>
+                    <div class="terminal-header">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                    </div>
+                    <div class="terminal-line">> nightwolf --cleanup --full</div>
+                    <div class="terminal-line">[INFO] Scanning for conflicts...</div>
+                    <div class="terminal-line">[WARN] <span class="cleanup-highlight">iCUE.exe</span> detected</div>
+                    <div class="terminal-line">[WARN] <span class="cleanup-highlight">ArmouryCrate.Service</span>
+                        detected</div>
+                    <div class="terminal-line">[WARN] <span class="cleanup-highlight">Razer Synapse</span> detected
+                    </div>
+                    <div class="terminal-line">[ACTION] Terminating 12 processes...</div>
+                    <div class="terminal-line">[SUCCESS] Control restored to Nightwolf RGB</div>
+                    <div class="terminal-line">> _</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container cta-final" data-reveal>
+        <h2>Ready to join the pack?</h2>
+        <p style="color: var(--text-dim); margin-bottom: 3rem; font-size: 1.2rem;">Download Nightwolf RGB today and
+            experience the future of PC lighting control.</p>
+        <div class="cta-group" style="justify-content: center;">
+            <a href="https://github.com/yourusername/nightwolf-rgb" class="btn btn-primary">
+                <i data-lucide="zap"></i> Download Now
+            </a>
+            <a href="https://github.com/yourusername/nightwolf-rgb" class="btn btn-secondary">
+                <i data-lucide="github"></i> View Repository
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p>&copy; 2026 Nightwolf RGB. Licensed under MIT.</p>
+                    <p style="font-size: 0.8rem; margin-top: 0.5rem;">Designed for OpenRGB compatibility.</p>
+                </div>
+                <div class="social-links">
+                    <a href="#"><i data-lucide="twitter"></i></a>
+                    <a href="#"><i data-lucide="github"></i></a>
+                    <a href="#"><i data-lucide="message-square"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Reveal animations on scroll
+        const revealElements = document.querySelectorAll('[data-reveal]');
+
+        const revealOnScroll = () => {
+            revealElements.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (elementTop < windowHeight * 0.85) {
+                    el.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+
+        // Header Background on Scroll
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.style.padding = '1rem 0';
+                nav.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
+            } else {
+                nav.style.padding = '1.5rem 0';
+                nav.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>
