@@ -1,6 +1,9 @@
 import { RGBColor, hexToRgb, hslToRgb } from '../utils/color.utils';
 import openrgb from './openrgb.controller';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { engine } = require('../../scripts/lighting-engine.cjs') as { engine: any };
+
 type EffectType = 'static' | 'breathing' | 'rainbow' | 'spectrum' | 'strobing' | 'custom';
 
 interface EffectOptions {
@@ -34,24 +37,32 @@ class EffectsEngine {
         // Use a for...of loop to await properly
         for (const device of devices) {
             try {
-                await openrgb.setDeviceMode(device.id, 0); // 0 is usually Direct Mode
+                await openrgb.setPaintMode(device.id);
             } catch (error) {
-                console.error(`Failed to set Direct Mode for device ${device.id}`, error);
+                console.error(`Failed to set paint mode for device ${device.id}`, error);
             }
         }
     }
 
     async startEffect(type: EffectType, options: EffectOptions = {}) {
-        // Stop existing effect
+        engine.assertEnabled(); // throws ENGINE_OFF if engine is disabled
         this.stopEffect();
 
         console.log(`✨ Starting Effect: ${type}`, options);
 
-        // Prepare devices
         await this.prepareDevices();
 
-        const speed = options.speed || 50;
+        if (!this.devices.length) {
+            throw new Error('Nenhum device RGB para animar');
+        }
+
         const color = options.color ? hexToRgb(options.color) : { red: 255, green: 0, blue: 0 };
+
+        if (type === 'static') {
+            this.currentEffect = { type, options, startTime: Date.now(), interval: null };
+            this.applyColorToAll(color);
+            return { success: true, message: `Effect ${type} started` };
+        }
 
         this.currentEffect = {
             type,
@@ -66,6 +77,8 @@ class EffectsEngine {
     stopEffect() {
         if (this.currentEffect?.interval) {
             clearInterval(this.currentEffect.interval);
+        }
+        if (this.currentEffect) {
             this.currentEffect = null;
             console.log('🛑 Effect stopped');
         }
@@ -99,7 +112,6 @@ class EffectsEngine {
             case 'static':
             default:
                 frameColor = hexToRgb(options.color || '#FFFFFF');
-                this.stopEffect(); // Static only needs one update
                 break;
         }
 

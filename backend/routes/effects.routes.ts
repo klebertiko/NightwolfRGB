@@ -18,6 +18,9 @@ router.post('/start', async (req: Request, res: Response) => {
         const result = await effects.startEffect(type, options);
         res.json(result);
     } catch (error: any) {
+        if (error.code === 'ENGINE_OFF') {
+            return res.status(409).json({ error: error.message, code: error.code });
+        }
         res.status(500).json({ error: error.message });
     }
 });

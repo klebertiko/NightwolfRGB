@@ -8,10 +8,12 @@ import http from 'http';
 import { OpenRGBLauncher } from './launcher/openrgb-launcher';
 
 import openrgb from './controllers/openrgb.controller';
+import engineRoutes from './routes/engine.routes';
 import devicesRoutes from './routes/devices.routes';
 import profilesRoutes from './routes/profiles.routes';
 import cleanupRoutes from './routes/cleanup.routes';
 import effectsRoutes from './routes/effects.routes';
+import updateRoutes from './routes/update.routes';
 
 const app = express();
 const server = http.createServer(app);
@@ -27,6 +29,14 @@ const launcher = new OpenRGBLauncher(OPENRGB_HOST, OPENRGB_PORT);
 
 app.use(cors());
 app.use(express.json());
+
+app.get('/', (req, res) => {
+    res.json({ 
+        status: 'Nightwolf RGB Backend is running', 
+        version: '1.0.0',
+        openrgb: openrgb.getStatus()
+    });
+});
 
 const clients = new Set<any>();
 
@@ -58,10 +68,17 @@ app.get('/api/status', (req, res) => {
     res.json(openrgb.getStatus());
 });
 
+// Add a simple root route to confirm backend is running
+app.get('/', (req, res) => {
+    res.json({ message: 'Nightwolf RGB Backend is running. Access API endpoints under /api' });
+});
+
+app.use('/api/engine', engineRoutes(broadcast));   // mount first — no route clash risk
 app.use('/api/devices', devicesRoutes);
 app.use('/api/profiles', profilesRoutes);
 app.use('/api/cleanup', cleanupRoutes);
 app.use('/api/effects', effectsRoutes);
+app.use('/api/update', updateRoutes(launcher, broadcast));
 
 app.use((err: any, req: any, res: any, next: any) => {
     console.error('Error:', err);
@@ -151,5 +168,16 @@ process.on('SIGTERM', async () => {
 
 // Start the application
 start();
+
+// Add unhandled exception and rejection handlers for better debugging
+process.on('uncaughtException', (error) => {
+    console.error('❌ Uncaught Exception:', error);
+    process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+    process.exit(1);
+});
 
 export { app, broadcast };
