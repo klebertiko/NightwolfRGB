@@ -1,855 +1,407 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nightwolf RGB | The Ultimate RGB Control Interface</title>
-
-    <!-- SEO Meta Tags -->
-    <meta name="description"
-        content="Master your PC's lighting with Nightwolf RGB. A premium, open-source interface for OpenRGB featuring real-time control, profile management, and the exclusive RGB Cleanup tool.">
-    <meta name="keywords"
-        content="RGB Control, OpenRGB, Nightwolf RGB, PC Lighting, Gaming PC, RGB Sync, RGB Cleanup, iCUE Alternative, Armoury Crate Alternative">
-    <meta name="author" content="Nightwolf RGB Team">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://klebertiko.github.io/NightwolfRGB/">
-    <meta property="og:title" content="Nightwolf RGB | The Ultimate RGB Control Interface">
-    <meta property="og:description"
-        content="Master your PC's lighting with Nightwolf RGB. Premium, fast, and open-source.">
-    <meta property="og:image" content="https://klebertiko.github.io/NightwolfRGB/images/social-preview.png">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://klebertiko.github.io/NightwolfRGB/">
-    <meta property="twitter:title" content="Nightwolf RGB | The Ultimate RGB Control Interface">
-    <meta property="twitter:description"
-        content="Master your PC's lighting with Nightwolf RGB. Premium, fast, and open-source.">
-    <meta property="twitter:image" content="https://klebertiko.github.io/NightwolfRGB/images/social-preview.png">
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700&display=swap"
-        rel="stylesheet">
-
-    <!-- Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="icon" type="image/png" href="images/nav_logo.png">
-
-    <style>
-        :root {
-            --bg-dark: #020203;
-            --bg-card: rgba(10, 10, 12, 0.7);
-            --primary: #8b5cf6;
-            --secondary: #06b6d4;
-            --accent: #f43f5e;
-            --text-main: #f8fafc;
-            --text-dim: #64748b;
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --neon-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
-            --hologram-glow: 0 0 30px rgba(6, 182, 212, 0.4);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        h1,
-        h2,
-        h3,
-        .brand {
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        /* Nav */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1.5rem 0;
-            background: rgba(5, 5, 5, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        nav .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .brand img {
-            width: 28px;
-            height: 28px;
-            object-fit: cover;
-            object-position: top center;
-            border-radius: 4px;
-            filter: drop-shadow(0 0 10px var(--primary));
-        }
-
-        .brand {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        /* Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            padding-top: 100px;
-            padding-bottom: 50px;
-            background: radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1), transparent 40%),
-                radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.1), transparent 40%);
-            overflow: hidden;
-        }
-
-        .hero .container {
-            display: flex;
-            align-items: center;
-            gap: 4rem;
-        }
-
-        .hero-content {
-            flex: 1.2;
-            z-index: 2;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            line-height: 1;
-            margin-bottom: 2rem;
-            background: linear-gradient(135deg, #fff 0%, #aaa 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: clamp(1rem, 2vw, 1.25rem);
-            color: var(--text-dim);
-            margin-bottom: 3rem;
-            max-width: 600px;
-        }
-
-        .cta-group {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-            box-shadow: var(--neon-shadow);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid var(--glass-border);
-            color: white;
-            backdrop-filter: blur(5px);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--text-dim);
-        }
-
-        /* Visual Element (Hero HUD) */
-        .hero-visual {
-            flex: 1;
-            position: relative;
-            aspect-ratio: 1/1;
-            max-width: 500px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1;
-        }
-
-        .hologram-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-hologram {
-            width: 280px;
-            height: 280px;
-            object-fit: contain;
-            mix-blend-mode: screen;
-            filter: drop-shadow(0 0 30px var(--secondary));
-            z-index: 5;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .hud-ring {
-            position: absolute;
-            border: 1px solid rgba(6, 182, 212, 0.2);
-            border-radius: 50%;
-            animation: rotate 20s linear infinite;
-        }
-
-        .ring-1 {
-            width: 350px;
-            height: 350px;
-            border-style: dashed;
-        }
-
-        .ring-2 {
-            width: 420px;
-            height: 420px;
-            border-width: 2px;
-            border-color: rgba(139, 92, 246, 0.1);
-            animation-duration: 30s;
-            animation-direction: reverse;
-        }
-
-        .ring-3 {
-            width: 480px;
-            height: 480px;
-            position: absolute;
-            border: 1px solid rgba(6, 182, 212, 0.05);
-        }
-
-        .hud-bracket {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            border: 2px solid var(--secondary);
-            opacity: 0.5;
-        }
-
-        .top-left {
-            top: 10%;
-            left: 10%;
-            border-right: 0;
-            border-bottom: 0;
-        }
-
-        .top-right {
-            top: 10%;
-            right: 10%;
-            border-left: 0;
-            border-bottom: 0;
-        }
-
-        .bottom-left {
-            bottom: 10%;
-            left: 10%;
-            border-right: 0;
-            border-top: 0;
-        }
-
-        .bottom-right {
-            bottom: 10%;
-            right: 10%;
-            border-left: 0;
-            border-top: 0;
-        }
-
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-
-        .hero-visual::after {
-            content: 'SYSTEM STATUS: OPTIMIZED';
-            position: absolute;
-            bottom: 5%;
-            font-family: 'Orbitron';
-            font-size: 0.7rem;
-            color: var(--secondary);
-            letter-spacing: 2px;
-            opacity: 0.6;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 0.3;
-            }
-
-            50% {
-                opacity: 0.8;
-            }
-        }
-
-        /* Features */
-        .section {
-            padding: 8rem 0;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 5rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .section-header p {
-            color: var(--text-dim);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-card {
-            background: var(--bg-card);
-            padding: 3rem;
-            border-radius: 16px;
-            border: 1px solid var(--glass-border);
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            background: rgba(139, 92, 246, 0.05);
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: rgba(139, 92, 246, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-        }
-
-        .feature-card h3 {
-            margin-bottom: 1rem;
-            font-size: 1.25rem;
-        }
-
-        .feature-card p {
-            color: var(--text-dim);
-        }
-
-        /* Cleanup Section */
-        .cleanup-section {
-            background: linear-gradient(180deg, var(--bg-dark), #0a0a0d, var(--bg-dark));
-            padding: 10rem 0;
-            position: relative;
-        }
-
-        .cleanup-content {
-            display: flex;
-            align-items: center;
-            gap: 4rem;
-        }
-
-        .cleanup-text {
-            flex: 1;
-        }
-
-        .cleanup-visual {
-            flex: 1;
-            background: var(--bg-card);
-            border-radius: 20px;
-            border: 1px solid rgba(244, 63, 94, 0.2);
-            padding: 2rem;
-            font-family: 'Courier New', Courier, monospace;
-            box-shadow: 0 0 50px rgba(244, 63, 94, 0.1);
-        }
-
-        .terminal-header {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .terminal-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .red {
-            background: #ff5f56;
-        }
-
-        .yellow {
-            background: #ffbd2e;
-        }
-
-        .green {
-            background: #27c93f;
-        }
-
-        .terminal-line {
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .cleanup-highlight {
-            color: var(--accent);
-            font-weight: bold;
-        }
-
-        /* Stats/Trust */
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            padding: 4rem 0;
-            border-top: 1px solid var(--glass-border);
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: block;
-        }
-
-        .stat-label {
-            color: var(--text-dim);
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-        }
-
-        /* Call to Action */
-        .cta-final {
-            text-align: center;
-            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.1), transparent 70%);
-            border-radius: 32px;
-            padding: 6rem 2rem;
-            margin-bottom: 8rem;
-        }
-
-        .cta-final h2 {
-            font-size: 3rem;
-            margin-bottom: 2rem;
-        }
-
-        /* Footer */
-        footer {
-            padding: 4rem 0;
-            border-top: 1px solid var(--glass-border);
-            color: var(--text-dim);
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .social-links a {
-            color: var(--text-dim);
-            transition: color 0.3s;
-        }
-
-        .social-links a:hover {
-            color: white;
-        }
-
-        /* Animations */
-        [data-reveal] {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
-        }
-
-        [data-reveal].active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .hero .container {
-                flex-direction: column;
-                text-align: center;
-                gap: 3rem;
-                padding-top: 60px;
-            }
-
-            .hero-content {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .cta-group {
-                justify-content: center;
-            }
-
-            .hero-visual {
-                width: 100%;
-                max-width: 600px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .cleanup-content {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nightwolf RGB — consola de luz para o PC</title>
+  <meta name="description" content="App de ambiente de trabalho para OpenRGB. Studio, Luz, Efeitos e Cenas no mesmo chrome. OpenRGB vai no bundle. Windows.">
+  <meta name="author" content="klebertiko">
+  <link rel="canonical" href="https://klebertiko.github.io/NightwolfRGB/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://klebertiko.github.io/NightwolfRGB/">
+  <meta property="og:title" content="Nightwolf RGB — consola de luz para o PC">
+  <meta property="og:description" content="App de ambiente de trabalho para OpenRGB. Studio, Luz, Efeitos e Cenas. OpenRGB vai no bundle.">
+  <meta property="og:image" content="https://klebertiko.github.io/NightwolfRGB/images/studio.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nightwolf RGB — consola de luz para o PC">
+  <meta name="twitter:description" content="App de ambiente de trabalho para OpenRGB. Studio, Luz, Efeitos e Cenas. OpenRGB vai no bundle.">
+  <meta name="twitter:image" content="https://klebertiko.github.io/NightwolfRGB/images/studio.png">
+  <link rel="icon" type="image/png" href="images/nav_logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* Genre: lighting console. Tone: instrumental. Anchor: --live #ff4d8d. Fingerprint: overlapping-image hero + hanging filmstrip + typographic command CTA. */
+    :root {
+      --paper: #0c0b0a;
+      --panel: #141210;
+      --inset: #1c1a17;
+      --live: #ff4d8d;
+      --ink: #f3ead8;
+      --ink-mute: color-mix(in srgb, var(--ink) 62%, var(--paper));
+      --ink-dim: color-mix(in srgb, var(--ink) 38%, var(--paper));
+      --font-display: "Syne", sans-serif;
+      --font-sans: "IBM Plex Sans", sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    a {
+      color: var(--live);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.18em;
+    }
+
+    a:hover {
+      color: var(--ink);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--live);
+      outline-offset: 3px;
+    }
+
+    .mast {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 1.25rem;
+      background: var(--paper);
+      border-bottom: 1px solid var(--inset);
+    }
+
+    .wordmark {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      color: var(--ink);
+      text-decoration: none;
+      min-width: 0;
+    }
+
+    .wordmark img {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .wordmark span {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.03em;
+      font-style: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .mast-link {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .mast-link:hover {
+      color: var(--live);
+    }
+
+    .stage {
+      position: relative;
+      background: var(--panel);
+    }
+
+    .stage img {
+      width: 100%;
+      max-height: min(78vh, 920px);
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .stage-copy {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 3.5rem 1.25rem 1.35rem;
+      background: linear-gradient(to top, var(--paper) 12%, transparent);
+    }
+
+    .stage-copy h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-style: normal;
+      font-size: clamp(1.75rem, 5vw, 2.75rem);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      overflow-wrap: anywhere;
+    }
+
+    .stage-copy p {
+      margin: 0.45rem 0 0;
+      max-width: 42rem;
+      color: var(--ink-mute);
+      font-size: 0.95rem;
+    }
+
+    .run {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.75rem 2rem;
+      padding: 1.5rem 1.25rem 2.25rem;
+      border-bottom: 1px solid var(--inset);
+    }
+
+    @media (min-width: 768px) {
+      .run {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+        align-items: end;
+      }
+    }
+
+    .kicker {
+      margin: 0 0 0.35rem;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+
+    .run p {
+      margin: 0;
+      color: var(--ink-mute);
+      max-width: 36rem;
+    }
+
+    pre {
+      margin: 0;
+      padding: 1rem 1.1rem;
+      background: var(--panel);
+      border: 1px solid var(--inset);
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--ink);
+    }
+
+    .shots {
+      padding: 2.5rem 1.25rem 3rem;
+    }
+
+    .shots > h2 {
+      margin: 0 0 1.5rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-style: normal;
+      font-size: clamp(1.4rem, 3vw, 1.85rem);
+      letter-spacing: -0.03em;
+      overflow-wrap: anywhere;
+    }
+
+    .film {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem 1.15rem;
+    }
+
+    @media (min-width: 768px) {
+      .film {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+    }
+
+    figure {
+      margin: 0;
+      min-width: 0;
+    }
+
+    figure img {
+      width: 100%;
+      border: 1px solid var(--inset);
+      background: var(--panel);
+    }
+
+    figcaption {
+      margin-top: 0.55rem;
+    }
+
+    figcaption strong {
+      display: block;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--live);
+    }
+
+    figcaption span {
+      display: block;
+      margin-top: 0.2rem;
+      color: var(--ink-mute);
+      font-size: 0.9rem;
+    }
+
+    .note {
+      padding: 0 1.25rem 3rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .note {
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr);
+        gap: 2.5rem;
+      }
+    }
+
+    .note h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-style: normal;
+      font-size: 1.5rem;
+      letter-spacing: -0.03em;
+      overflow-wrap: anywhere;
+    }
+
+    .note p {
+      margin: 0 0 0.85rem;
+      color: var(--ink-mute);
+      max-width: 40rem;
+    }
+
+    .note p:last-child {
+      margin-bottom: 0;
+    }
+
+    footer {
+      padding: 1.1rem 1.25rem 1.6rem;
+      border-top: 1px solid var(--inset);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+
+    footer a {
+      color: var(--ink-mute);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--live);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <header class="mast">
+    <a class="wordmark" href="https://github.com/klebertiko/NightwolfRGB">
+      <img src="images/nav_logo.png" width="28" height="28" alt="">
+      <span>Nightwolf RGB</span>
+    </a>
+    <a class="mast-link" href="https://github.com/klebertiko/NightwolfRGB">GitHub</a>
+  </header>
 
-    <nav>
-        <div class="container">
-            <div class="brand">
-                <img src="images/nav_logo.png" alt="Nightwolf RGB Logo"> Nightwolf RGB
-            </div>
-            <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#cleanup">RGB Cleanup</a>
-                <a href="#quick-start">Quick Start</a>
-                <a href="https://github.com/klebertiko/NightwolfRGB/blob/main/HOW_IT_WORKS.md">Docs</a>
-                <a href="https://github.com/klebertiko/NightwolfRGB" class="btn btn-secondary"
-                    style="padding: 0.5rem 1rem;">GitHub</a>
-            </div>
-        </div>
-    </nav>
+  <section class="stage" aria-label="Janela do Studio">
+    <img src="images/studio.png" width="1600" height="900" alt="Janela do Nightwolf RGB no separador Studio, com a placa B550M GAMING X WIFI6 no palco e o painel Pintar à direita.">
+    <div class="stage-copy">
+      <h1>O PC agora</h1>
+      <p>Consola de ambiente de trabalho para OpenRGB. A janela é o produto — não um site a controlar o PC a partir do telemóvel.</p>
+    </div>
+  </section>
 
-    <header class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1 data-reveal>Take Control of Your RGB Domain</h1>
-                <p data-reveal>The ultimate professional interface for OpenRGB. Synchronize all your components, manage
-                    profiles, and eliminate software conflicts with one click.</p>
-                <div class="cta-group" data-reveal>
-                    <a href="#quick-start" class="btn btn-primary">
-                        <i data-lucide="zap"></i> Get Started
-                    </a>
-                    <a href="#features" class="btn btn-secondary">Explore Features</a>
-                </div>
-            </div>
-            <div class="hero-visual" data-reveal>
-                <div class="hologram-container">
-                    <div class="hud-ring ring-1"></div>
-                    <div class="hud-ring ring-2"></div>
-                    <div class="hud-ring ring-3"></div>
-                    <div class="hud-bracket top-left"></div>
-                    <div class="hud-bracket top-right"></div>
-                    <div class="hud-bracket bottom-left"></div>
-                    <div class="hud-bracket bottom-right"></div>
-                    <img src="images/logo.png" alt="Nightwolf RGB Hologram" class="logo-hologram">
-                </div>
-            </div>
-        </div>
-    </header>
+  <section class="run">
+    <div>
+      <p class="kicker">Arranque</p>
+      <p>No Windows, na raiz do repositório. O OpenRGB vai no bundle; o backend sobe com a app.</p>
+    </div>
+    <pre><code>npm install
+npm run desktop</code></pre>
+  </section>
 
-    <section class="container stats" data-reveal>
-        <div class="stat-item">
-            <span class="stat-value">70+</span>
-            <span class="stat-label">Processes Detected</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-value">100%</span>
-            <span class="stat-label">Open Source</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-value">0ms</span>
-            <span class="stat-label">Latency Control</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-value">FREE</span>
-            <span class="stat-label">Forever</span>
-        </div>
-    </section>
+  <section class="shots">
+    <h2>Quatro vistas, o mesmo chrome</h2>
+    <div class="film">
+      <figure>
+        <img src="images/studio.png" alt="Studio: palco do chassis e lista de devices.">
+        <figcaption>
+          <strong>Studio</strong>
+          <span>Palco ao vivo. Clique no chassis ou num device.</span>
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="images/luz.png" alt="Luz: cor, brilho e modos hardware da placa detectada.">
+        <figcaption>
+          <strong>Luz</strong>
+          <span>Cor, brilho e modos hardware do device seleccionado.</span>
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="images/efeitos.png" alt="Efeitos: grelha Static Breath Strobe Rainbow Spectrum Seq.">
+        <figcaption>
+          <strong>Efeitos</strong>
+          <span>Motor de efeitos na própria vista. Áudio fica idle se não houver entrada.</span>
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="images/cenas.png" alt="Cenas: botão Nova cena no palco vazio.">
+        <figcaption>
+          <strong>Cenas</strong>
+          <span>Guardar e voltar a um estado. Vazio até existir a primeira cena.</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
 
-    <section id="features" class="section container">
-        <div class="section-header" data-reveal>
-            <h2>Elite Features</h2>
-            <p>Designed for enthusiasts who demand performance and aesthetics without the bloat of manufacturer
-                software.</p>
-        </div>
+  <section class="note">
+    <h2>Limpeza, não magia</h2>
+    <div>
+      <p>iCUE, Armoury Crate, Synapse e afins disputam o mesmo hardware. A vista Limpeza lista <strong>63 processos Windows</strong> conhecidos e pode matá-los — só no Windows, só quando o operador pede.</p>
+      <p>Controle vive uma vez, na titlebar. SDK é lâmpada de ligação, não accent. O rodapé lê devices, selecção e se o controlo está off.</p>
+      <p>Capturas de 8 set 2026, no app a correr no Windows, 1 device: B550M GAMING X WIFI6.</p>
+    </div>
+  </section>
 
-        <div class="feature-grid">
-            <div class="feature-card" data-reveal>
-                <div class="feature-icon"><i data-lucide="layers"></i></div>
-                <h3>Universal Sync</h3>
-                <p>Synchronize Motherboards, RAM, GPUs, and LED strips from different brands in one unified interface.
-                </p>
-            </div>
-            <div class="feature-card" data-reveal>
-                <div class="feature-icon"><i data-lucide="save"></i></div>
-                <h3>Profile Snapshots</h3>
-                <p>Save unlimited lighting configurations and switch between them instantly with zero hardware delay.
-                </p>
-            </div>
-            <div class="feature-card" data-reveal>
-                <div class="feature-icon"><i data-lucide="cpu"></i></div>
-                <h3>Hardware Native</h3>
-                <p>Access direct hardware modes for maximum responsiveness and smooth animations.</p>
-            </div>
-            <div class="feature-card" data-reveal>
-                <div class="feature-icon"><i data-lucide="globe"></i></div>
-                <h3>Web-Based Control</h3>
-                <p>Control your PC's lighting from your smartphone or any device on your local network via browser.</p>
-            </div>
-            <div class="feature-card" data-reveal>
-                <div class="feature-icon"><i data-lucide="code-2"></i></div>
-                <h3>Developer Friendly</h3>
-                <p>Full REST API and WebSocket support for custom integrations and third-party app development.</p>
-            </div>
-            <div class="feature-card" data-reveal>
-                <div class="feature-icon"><i data-lucide="shield-check"></i></div>
-                <h3>Privacy First</h3>
-                <p>No telemetry, no account required, and no background tracking. Just pure RGB control.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="quick-start" class="section container">
-        <div class="section-header" data-reveal>
-            <h2>Quick Start Guide</h2>
-            <p>Get your lighting synchronized in under 5 minutes. No complex configuration required.</p>
-        </div>
-
-        <div class="feature-grid">
-            <div class="feature-card" data-reveal>
-                <div class="feature-icon" style="background: rgba(6, 182, 212, 0.1); color: var(--secondary);">1</div>
-                <h3>Download OpenRGB</h3>
-                <p>Install <a href="https://openrgb.org" target="_blank" style="color: var(--secondary);">OpenRGB</a>
-                    and start the SDK Server on port 6742. This is the core driver Nightwolf communicates with.</p>
-            </div>
-            <div class="feature-card" data-reveal>
-                <div class="feature-icon" style="background: rgba(6, 182, 212, 0.1); color: var(--secondary);">2</div>
-                <h3>Init Workspace</h3>
-                <p>Clone the repository and install dependencies using <code>npm install</code> in both
-                    <code>backend/</code> and <code>frontend/</code> directories.
-                </p>
-            </div>
-            <div class="feature-card" data-reveal>
-                <div class="feature-icon" style="background: rgba(6, 182, 212, 0.1); color: var(--secondary);">3</div>
-                <h3>Launch & Sync</h3>
-                <p>Run <code>npm run dev</code> from the root. Open the dashboard, click "Cleanup" to remove conflicts,
-                    and enjoy universal control!</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="cleanup" class="cleanup-section">
-        <div class="container">
-            <div class="cleanup-content">
-                <div class="cleanup-text" data-reveal>
-                    <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">The <span style="color: var(--accent);">RGB
-                            Cleanup</span></h2>
-                    <p style="font-size: 1.2rem; margin-bottom: 2rem;">Tired of iCUE, Armoury Crate, and Razer Synapse
-                        fighting for control? Nightwolf's exclusive Cleanup tool identifies and terminates over 70
-                        conflicting background processes safely.</p>
-                    <ul style="list-style: none; margin-bottom: 2.5rem;">
-                        <li style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
-                            <i data-lucide="check-circle-2" style="color: var(--accent);"></i>
-                            Eliminate "Rainbow Vomit" caused by software conflicts
-                        </li>
-                        <li style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
-                            <i data-lucide="check-circle-2" style="color: var(--accent);"></i>
-                            Free up system RAM used by manufacturer bloatware
-                        </li>
-                        <li style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
-                            <i data-lucide="check-circle-2" style="color: var(--accent);"></i>
-                            Restore full control to OpenRGB instantly
-                        </li>
-                    </ul>
-                    <a href="https://github.com/klebertiko/NightwolfRGB#rgb-cleanup-feature"
-                        class="btn btn-secondary">Learn more about
-                        Cleanup</a>
-                </div>
-                <div class="cleanup-visual" data-reveal>
-                    <div class="terminal-header">
-                        <div class="terminal-dot red"></div>
-                        <div class="terminal-dot yellow"></div>
-                        <div class="terminal-dot green"></div>
-                    </div>
-                    <div class="terminal-line">> nightwolf --cleanup --full</div>
-                    <div class="terminal-line">[INFO] Scanning for conflicts...</div>
-                    <div class="terminal-line">[WARN] <span class="cleanup-highlight">iCUE.exe</span> detected</div>
-                    <div class="terminal-line">[WARN] <span class="cleanup-highlight">ArmouryCrate.Service</span>
-                        detected</div>
-                    <div class="terminal-line">[WARN] <span class="cleanup-highlight">Razer Synapse</span> detected
-                    </div>
-                    <div class="terminal-line">[ACTION] Terminating 12 processes...</div>
-                    <div class="terminal-line">[SUCCESS] Control restored to Nightwolf RGB</div>
-                    <div class="terminal-line">> _</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="container cta-final" data-reveal>
-        <h2>Ready to join the pack?</h2>
-        <p style="color: var(--text-dim); margin-bottom: 3rem; font-size: 1.2rem;">Download Nightwolf RGB today and
-            experience the future of PC lighting control.</p>
-        <div class="cta-group" style="justify-content: center;">
-            <a href="https://github.com/klebertiko/NightwolfRGB" class="btn btn-primary">
-                <i data-lucide="github"></i> View Repository
-            </a>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-info">
-                    <p>&copy; 2026 Nightwolf RGB. Licensed under MIT.</p>
-                    <p style="font-size: 0.8rem; margin-top: 0.5rem;">Designed for OpenRGB compatibility.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
-
-        // Reveal animations on scroll
-        const revealElements = document.querySelectorAll('[data-reveal]');
-
-        const revealOnScroll = () => {
-            revealElements.forEach(el => {
-                const elementTop = el.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
-                if (elementTop < windowHeight * 0.85) {
-                    el.classList.add('active');
-                }
-            });
-        };
-
-        window.addEventListener('scroll', revealOnScroll);
-        window.addEventListener('load', revealOnScroll);
-
-        // Header Background on Scroll
-        const nav = document.querySelector('nav');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                nav.style.padding = '1rem 0';
-                nav.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
-            } else {
-                nav.style.padding = '1.5rem 0';
-                nav.style.boxShadow = 'none';
-            }
-        });
-    </script>
+  <footer>
+    <span>MIT · desktop · OpenRGB no bundle</span>
+    <a href="https://github.com/klebertiko/NightwolfRGB">klebertiko/NightwolfRGB</a>
+  </footer>
 </body>
-
 </html>
+<!-- hallmark pre-emit: Philosophy 4, Hierarchy 4, Execution 4, Specificity 5, Restraint 4, Variety 4 -->

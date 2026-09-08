@@ -142,17 +142,22 @@ npm install
 
 ### Running the Application
 
-```bash
-# Terminal 1 - Start backend
-cd backend
-npm run dev
+Nightwolf RGB is a **desktop app**. From the repo root:
 
-# Terminal 2 - Start frontend
-cd frontend
-npm run dev
+```bash
+npm install
+npm run desktop
 ```
 
-Access the interface at: **http://localhost:5173**
+That opens a native window (Electron). The backend is started by the app; Vite is used only as the renderer in development.
+
+To elevate on Windows (needed for OpenRGB + RGB cleanup services):
+
+```powershell
+.\start-dev-admin.ps1
+```
+
+Browser at `http://localhost:5173` is a fallback for layout work, not the product.
 
 ---
 
@@ -214,17 +219,19 @@ const { status, detectConflicts, fullCleanup } = useCleanup();
 
 ## 🎨 Screenshots
 
-### Main Dashboard
-![Dashboard](docs/images/dashboard.png)
+Captures from the desktop app (`npm run desktop`) on 8 Sep 2026 — 1 device, B550M GAMING X WIFI6. Landing: [klebertiko.github.io/NightwolfRGB](https://klebertiko.github.io/NightwolfRGB/).
 
-### RGB Matrix Control
-![Matrix](docs/images/matrix.png)
+### Studio
+![Studio](docs/images/studio.png)
 
-### RGB Cleanup Feature
-![Cleanup](docs/images/cleanup.png)
+### Luz
+![Luz](docs/images/luz.png)
 
-### Profile Management
-![Profiles](docs/images/profiles.png)
+### Efeitos
+![Efeitos](docs/images/efeitos.png)
+
+### Cenas
+![Cenas](docs/images/cenas.png)
 
 ---
 
