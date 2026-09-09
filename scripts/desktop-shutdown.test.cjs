@@ -179,6 +179,28 @@ test('quitDesktop: kills backend tree then frees ports then calls exit(0)', asyn
     assert.equal(exitCode, 0, 'exit must be called with 0');
 });
 
+test('quitDesktop: hung taskkill still frees ports and exits after timeout', async () => {
+    const started = Date.now();
+    let exitCode = null;
+    let freePortsCalled = false;
+
+    const hungSpawn = () => ({
+        on() { return this; },
+    });
+
+    await quitDesktop({
+        backendPid: 42,
+        spawn: hungSpawn,
+        exit: (c) => { exitCode = c; },
+        freePorts: async () => { freePortsCalled = true; },
+        killTimeoutMs: 40,
+    });
+
+    assert.equal(freePortsCalled, true, 'freePorts must run even if taskkill hangs');
+    assert.equal(exitCode, 0, 'exit must still be called with 0');
+    assert.ok(Date.now() - started < 1500, 'must not wait forever on a zombie tree');
+});
+
 test('quitDesktop: null backendPid — skips spawn, still frees ports and exits 0', async () => {
     let freePortsCalled = false;
     let exitCode = null;

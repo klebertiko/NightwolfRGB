@@ -74,25 +74,46 @@ function parseListeningPids(netstatOutput, port) {
  *   backendPid: number|null,
  *   spawn: (cmd: string, args: string[], opts: object) => import('child_process').ChildProcess,
  *   exit: (code: number) => void,
- *   freePorts: () => Promise<void>|void
+ *   freePorts: () => Promise<void>|void,
+ *   killTimeoutMs?: number
  * }} opts
  */
-async function quitDesktop({ backendPid, spawn, exit, freePorts }) {
+const DEFAULT_KILL_TIMEOUT_MS = 4000;
+
+function waitForCloseOrTimeout(child, ms) {
+    return new Promise((resolve) => {
+        let settled = false;
+        const done = () => {
+            if (settled) return;
+            settled = true;
+            resolve();
+        };
+        child.on('close', done);
+        child.on('error', done);
+        setTimeout(done, ms);
+    });
+}
+
+async function quitDesktop({ backendPid, spawn, exit, freePorts, killTimeoutMs = DEFAULT_KILL_TIMEOUT_MS }) {
     if (backendPid) {
         const { cmd, args } = killTreeArgs(backendPid);
-        await new Promise((resolve) => {
-            const child = spawn(cmd, args, {
-                windowsHide: true,
-                stdio: 'ignore',
-                detached: false,
-            });
-            child.on('close', resolve);
-            child.on('error', resolve); // ignore taskkill errors — process may already be gone
+        const child = spawn(cmd, args, {
+            windowsHide: true,
+            stdio: 'ignore',
+            detached: false,
         });
+        await waitForCloseOrTimeout(child, killTimeoutMs);
     }
 
-    await freePorts();
+    try {
+        await Promise.race([
+            Promise.resolve(freePorts()),
+            new Promise((resolve) => setTimeout(resolve, killTimeoutMs)),
+        ]);
+    } catch (err) {
+        console.error('Nightwolf freePorts during quit:', err);
+    }
     exit(0);
 }
 
-module.exports = { KILL_TARGETS, killTreeArgs, parseListeningPids, quitDesktop };
+module.exports = { KILL_TARGETS, killTreeArgs, parseListeningPids, quitDesktop, DEFAULT_KILL_TIMEOUT_MS };

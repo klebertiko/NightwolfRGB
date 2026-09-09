@@ -25,6 +25,18 @@ test('main sets AppUserModelId before the single-instance lock', () => {
     assert.ok(lock > aumid, 'AUMID must be set before Windows sees the process');
 });
 
+test('second-instance restores or creates a window instead of returning on a null handle', () => {
+    const src = read('electron/main.cjs');
+    const handler = src.slice(src.indexOf("app.on('second-instance'"));
+    assert.ok(handler.length > 0, 'second-instance handler must exist');
+    assert.equal(
+        /if\s*\(\s*!mainWindow\s*\)\s*return/.test(handler.slice(0, 400)),
+        false,
+        'a null window after close is why Start Menu / taskbar do nothing',
+    );
+    assert.match(handler.slice(0, 500), /restoreOrCreateWindow/);
+});
+
 test('main writes a Start Menu shortcut with the wolf icon and AUMID', () => {
     const src = read('electron/main.cjs');
     assert.match(src, /writeShortcutLink/);

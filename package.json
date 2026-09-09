@@ -16,7 +16,7 @@
         "secrets-scan": "node scripts/secrets-scan.cjs",
         "pack:release": "node scripts/pack-release.cjs",
         "test:windows-identity": "node --test scripts/windows-app-identity.test.cjs",
-        "test:ci": "node --test scripts/lighting-engine.test.cjs scripts/type-roles.test.cjs scripts/chrome-ia.test.cjs scripts/openrgb-parity.test.cjs scripts/windows-app-identity.test.cjs scripts/desktop-shutdown.test.cjs scripts/pack-release.test.cjs scripts/secrets-scan.test.cjs",
+        "test:ci": "node --test scripts/lighting-engine.test.cjs scripts/type-roles.test.cjs scripts/chrome-ia.test.cjs scripts/openrgb-parity.test.cjs scripts/windows-app-identity.test.cjs scripts/desktop-shutdown.test.cjs scripts/desktop-restore.test.cjs scripts/pack-release.test.cjs scripts/secrets-scan.test.cjs",
         "brand": "node scripts/update-brand.cjs",
         "update": "node scripts/update.cjs",
         "update:app": "node scripts/update.cjs --app",

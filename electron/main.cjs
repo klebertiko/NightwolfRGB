@@ -6,6 +6,7 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const { quitDesktop } = require('../scripts/desktop-shutdown.cjs');
 const { freePorts } = require('../scripts/free-desktop-ports.cjs');
+const { restoreOrCreateWindow } = require('../scripts/desktop-restore.cjs');
 
 const isDev = !app.isPackaged;
 const BACKEND_PORT = Number(process.env.SERVER_PORT || 3001);
@@ -28,13 +29,18 @@ let quitting = false;
 function initiateQuit() {
     if (quitting) return;
     quitting = true;
+    const hardExit = setTimeout(() => app.exit(0), 6000);
     quitDesktop({
         backendPid: backendProcess?.pid ?? null,
         spawn,
-        exit: (code) => app.exit(code),
+        exit: (code) => {
+            clearTimeout(hardExit);
+            app.exit(code);
+        },
         freePorts,
     }).catch((err) => {
         console.error('Nightwolf desktop shutdown error:', err);
+        clearTimeout(hardExit);
         app.exit(1);
     });
 }
@@ -67,7 +73,8 @@ function ensureWindowsShortcut() {
     );
     const appPath = app.getAppPath();
     fs.mkdirSync(path.dirname(shortcutPath), { recursive: true });
-    const ok = shell.writeShortcutLink(shortcutPath, 'create', {
+    const operation = fs.existsSync(shortcutPath) ? 'replace' : 'create';
+    const ok = shell.writeShortcutLink(shortcutPath, operation, {
         target: app.getPath('exe'),
         args: app.isPackaged ? '' : `"${appPath}"`,
         cwd: app.isPackaged ? path.dirname(app.getPath('exe')) : appPath,
@@ -84,10 +91,7 @@ if (!gotLock) {
     app.quit();
 } else {
     app.on('second-instance', () => {
-        if (!mainWindow) return;
-        if (mainWindow.isMinimized()) mainWindow.restore();
-        mainWindow.show();
-        mainWindow.focus();
+        restoreOrCreateWindow(mainWindow, { create: createWindow });
     });
 }
 
@@ -129,7 +133,7 @@ function startBackend() {
     backendProcess = spawn(npmCmd, args, {
         cwd: backendDir,
         stdio: 'inherit',
-        shell: process.platform === 'win32',
+        shell: false,
         windowsHide: true,
         env: { ...process.env, FORCE_COLOR: '1' },
     });
@@ -188,8 +192,12 @@ function createWindow() {
     mainWindow.once('ready-to-show', reveal);
     setTimeout(reveal, 2500);
 
-    mainWindow.on('close', () => {
-        // Fires when win.close() is called programmatically or via OS (non-custom-titlebar paths).
+    mainWindow.on('close', (event) => {
+        if (quitting) return;
+        // Keep the HWND until app.exit so the taskbar / Start Menu can restore
+        // instead of grouping a lock-holder with no window.
+        event.preventDefault();
+        if (mainWindow && !mainWindow.isDestroyed()) mainWindow.hide();
         initiateQuit();
     });
 
@@ -243,7 +251,10 @@ ipcMain.on('window:maximize', () => {
     if (win.isMaximized()) win.unmaximize();
     else win.maximize();
 });
-ipcMain.on('window:close', () => initiateQuit());
+ipcMain.on('window:close', () => {
+    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.hide();
+    initiateQuit();
+});
 
 app.whenReady().then(async () => {
     try {
