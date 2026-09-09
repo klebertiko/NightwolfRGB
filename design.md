@@ -89,7 +89,14 @@ Desktop 1440×900. Spacing is dashboard-dense (8–24px), not marketing (48–96
 5. **`--live` default is `#ff4d8d`.** Do not revert to sulfur/orange. Accent follows the painted hardware colour at runtime.
 6. **No fourth family.** `frontend/index.html` loads exactly Syne + IBM Plex Sans + IBM Plex Mono. Any design requiring a fourth family is a design error.
 
-**Landing** (`docs/index.html`, GitHub Pages): same three families and the locked graphite / ink / `--live` tokens. Hero is a real Studio capture — no Inter, Orbitron, or purple/cyan hologram.
+**Landing** (`docs/index.html`, GitHub Pages): same three families and the locked graphite / ink tokens. No Inter, Orbitron, or purple/cyan hologram.
+
+- Macrostructure: Photographic. Genre: atmospheric. Tone: cinematic.
+- Nav: N5 floating pill. On small screens the pill hugs Nightwolf + Menu + Baixar; Luz / Efeitos / Cenas sit in a details menu until 60rem. Footer: Ft5 statement.
+- Folds are real Studio / Luz / Efeitos / Cenas captures, framed inside a centered wrap with gutter — never flush to the browser edge. Density is marketing (`--space-xl`–`--space-3xl`), not dashboard.
+- `--live` on the landing is driven by cursor X across `WASH_PRESETS` (`#c9897a` `#d45c5c` `#c4a35a` `#6f9e6a` `#4a7ea8` `#f3ead8`). A follow-spot and chrome glow track `--live`. Until the pointer moves, `--live` stays `#ff4d8d`.
+- Motion: follow-spot (custom props only). Scroll: CSS `animation-timeline: view()` scale on folds; text bands fade once (IntersectionObserver). In-page nav clicks fire a `--live` shutter. `prefers-reduced-motion` and coarse pointers kill the spot, view timelines, and shutter.
+- Do not ship the 5-column feature strip, wash-chip hex row, or a magenta brick CTA.
 
 **Self-score (pre-emit):**
 
