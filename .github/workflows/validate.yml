@@ -1,0 +1,28 @@
+# Reusable fail-closed gates. No skip inputs. Callers may not publish
+# if this workflow fails.
+name: Validate
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install (root, backend, frontend)
+        run: npm run install:all
+
+      - name: Secrets, audit, compile, tests
+        run: npm run ci
