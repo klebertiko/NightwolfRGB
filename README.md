@@ -9,7 +9,7 @@
 [![React](https://img.shields.io/badge/react-18.2.0-blue)](https://reactjs.org/)
 [![OpenRGB Compatible](https://img.shields.io/badge/OpenRGB-Compatible-orange)](https://openrgb.org/)
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Screenshots](#-screenshots) • [License](#-license)
+[Features](#-features) • [OpenRGB](#-openrgb) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Screenshots](#-screenshots) • [License](#-license)
 
 </div>
 
@@ -17,7 +17,7 @@
 
 ## 🎯 Overview
 
-**Nightwolf RGB** is a premium, full-stack RGB control application that integrates seamlessly with OpenRGB. It provides an intuitive, modern interface for controlling all your RGB devices without the bloat of manufacturer software.
+**Nightwolf RGB** is a desktop RGB control app for Windows. **OpenRGB is the engine** — Nightwolf is 100% compatible and **bundles OpenRGB**. Paint your PC's lighting without iCUE, Armoury Crate, or a manufacturer account.
 
 ### Why Nightwolf RGB?
 
@@ -109,13 +109,29 @@
 
 ---
 
+## 🔌 OpenRGB
+
+OpenRGB is the engine. Nightwolf is **100% compatible** and **bundles OpenRGB** — the desktop app starts it. You do not need a separate OpenRGB install for `npm run desktop`.
+
+- SDK server typically on **port 6742**
+- Current live setup: **protocol v5**
+- Device identity, hardware modes, zones, per-LED, matrix, resize, segments, rescan
+- Native `.orp` profiles (separate from Nightwolf scenes)
+- If the Effects plugin is **already loaded** in the bundled OpenRGB, Nightwolf can start/stop it by name. There is no plugin store.
+
+Nightwolf does **not**: install or unload plugins; expose Effects-plugin speed/audio/shaders; auto-update Nightwolf.exe over the network; speak protocol v6; capture mic or system audio via the SDK.
+
+Links: [openrgb.org](https://openrgb.org/) · [GitLab · CalcProgrammer1/OpenRGB](https://gitlab.com/CalcProgrammer1/OpenRGB)
+
+---
+
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-1. **OpenRGB** (Download from [openrgb.org](https://openrgb.org))
-2. **Node.js** v18 or higher
-3. **Windows** (Linux/Mac support planned)
+1. **Windows** (Linux/Mac support planned)
+2. **Node.js** v18 or higher (clone / dev only)
+3. **OpenRGB** comes in the Nightwolf bundle — `npm run desktop` starts it. You do not download it separately.
 
 ### Installation
 
@@ -133,12 +149,11 @@ cd ../frontend
 npm install
 ```
 
-### Configuration
+### OpenRGB (bundled)
 
-1. **Open OpenRGB**
-2. Navigate to **SDK Server** tab
-3. Click **Start Server**
-4. Verify status shows **Online** on port 6742
+`npm run desktop` starts the bundled OpenRGB SDK (typically port 6742). You do not need to open OpenRGB first.
+
+If you run a standalone OpenRGB for debugging: SDK Server tab → Start Server → Online on 6742.
 
 ### Running the Application
 

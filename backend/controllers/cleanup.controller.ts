@@ -257,6 +257,7 @@ export class RGBCleanupService {
         return {
             platform: this.platform,
             supported: this.platform === 'win32',
+            catalogSize: RGB_PROCESSES.windows.length,
             detection,
             recommendations: detection.detected
                 ? 'Execute o cleanup para melhor controle RGB'

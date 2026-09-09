@@ -10,7 +10,7 @@ export class OpenRGBLauncher {
     private sdkPort: number;
     private autoStarted: boolean = false;
 
-    constructor(sdkHost: string = 'localhost', sdkPort: number = 6742) {
+    constructor(sdkHost: string = '127.0.0.1', sdkPort: number = 6742) {
         this.processManager = new ProcessManager();
         this.sdkHost = sdkHost;
         this.sdkPort = sdkPort;
@@ -71,10 +71,10 @@ export class OpenRGBLauncher {
         console.log('🔵 Starting OpenRGB...');
 
         try {
-            // Args for OpenRGB:
             // --server: Enable SDK server
+            // --server-host: bind SDK to loopback (OpenRGB 1.0rc+; Nightwolf bundles this)
             // --noautoconnect: Don't auto-connect to devices (reduces startup time)
-            const args = ['--server', '--noautoconnect'];
+            const args = ['--server', '--server-host', '127.0.0.1', '--noautoconnect'];
 
             this.processManager.spawn(args);
             this.autoStarted = true;
@@ -94,6 +94,26 @@ export class OpenRGBLauncher {
             console.error('❌ Failed to start OpenRGB:', error);
             throw error;
         }
+    }
+
+    /**
+     * Stop the bundled OpenRGB even if we did not auto-start it.
+     * Needed before replacing OpenRGB.exe on Windows (file lock).
+     */
+    async forceStopForUpdate(): Promise<void> {
+        if (this.processManager.isRunning()) {
+            await this.processManager.kill();
+        }
+        if (process.platform === 'win32') {
+            const { spawnSync } = await import('child_process');
+            spawnSync('taskkill', ['/IM', 'OpenRGB.exe', '/F'], { windowsHide: true, encoding: 'utf8' });
+        }
+        const start = Date.now();
+        while (Date.now() - start < 8000) {
+            if (!(await this.isSDKServerRunning())) return;
+            await new Promise((resolve) => setTimeout(resolve, 300));
+        }
+        throw new Error('OpenRGB still holding port 6742 — close it and try again');
     }
 
     /**

@@ -4,16 +4,16 @@ import { api } from '../api/client';
 export const useCleanup = () => {
     const [status, setStatus] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
 
     const getStatus = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await api.get('/api/cleanup/status');
+            const response = await api.getCleanupStatus();
             setStatus(response.data);
             return response.data;
-        } catch (err) {
+        } catch (err: any) {
             setError(err.message);
             console.error('Error getting cleanup status:', err);
             throw err;
@@ -26,9 +26,9 @@ export const useCleanup = () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await api.get('/api/cleanup/detect');
+            const response = await api.detectCleanup();
             return response.data;
-        } catch (err) {
+        } catch (err: any) {
             setError(err.message);
             console.error('Error detecting conflicts:', err);
             throw err;
@@ -41,9 +41,9 @@ export const useCleanup = () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await api.post('/api/cleanup/kill-processes');
+            const response = await api.killCleanupProcesses();
             return response.data;
-        } catch (err) {
+        } catch (err: any) {
             setError(err.message);
             console.error('Error killing processes:', err);
             throw err;
@@ -56,10 +56,10 @@ export const useCleanup = () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await api.post('/api/cleanup/full');
-            await getStatus(); // Refresh status
+            const response = await api.fullCleanup();
+            await getStatus();
             return response.data;
-        } catch (err) {
+        } catch (err: any) {
             setError(err.message);
             console.error('Error performing cleanup:', err);
             throw err;

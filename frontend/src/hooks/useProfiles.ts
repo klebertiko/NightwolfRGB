@@ -40,7 +40,8 @@ export const useProfiles = () => {
 
     const applyProfile = useCallback(async (profileId: any) => {
         try {
-            await api.applyProfile(profileId);
+            const response = await api.applyProfile(profileId);
+            return response.data; // { success, toggledOff?, engine: { enabled, activeSceneId }, results? }
         } catch (err) {
             console.error('Error applying profile:', err);
             throw err;

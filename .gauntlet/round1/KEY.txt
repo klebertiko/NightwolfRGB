@@ -1,0 +1,6 @@
+﻿p1 First screen: A=bar(signal hero) B=ours hero
+p2 Get the app: A=ours download B=bar(ghdesktop download)
+p3 Features: A=bar(icue features) B=ours features
+p4 Product imagery: A=ours hero B=bar(ghdesktop hero)
+p5 Repo path: A=bar(ghdesktop download/get involved) B=ours download/repo
+p6 Mobile: A=ours mobile B=bar(signal mobile)

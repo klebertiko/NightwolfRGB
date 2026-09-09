@@ -21,9 +21,8 @@ Write-Host ""
 $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $scriptPath
 
-# Start the dev servers
-Write-Host "🚀 Starting Backend + Frontend..." -ForegroundColor Cyan
-npm run dev
+Write-Host "Starting Nightwolf RGB desktop..." -ForegroundColor Cyan
+npm run desktop
 
 # Keep the window open if there's an error
 if ($LASTEXITCODE -ne 0) {

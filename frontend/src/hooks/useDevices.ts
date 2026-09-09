@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '../api/client';
+import type { DeviceData, RGBColor } from '../types';
 
 export const useDevices = () => {
-    const [devices, setDevices] = useState<any[]>([]);
+    const [devices, setDevices] = useState<DeviceData[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [scanning, setScanning] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const fetchDevices = useCallback(async () => {
         try {
@@ -20,9 +22,9 @@ export const useDevices = () => {
         }
     }, []);
 
-    const setColor = useCallback(async (deviceId: any, color: any) => {
+    const setColor = useCallback(async (deviceId: number, color: string, brightness = 100) => {
         try {
-            await api.setDeviceColor(deviceId, color);
+            await api.setDeviceColor(deviceId, color, brightness);
             await fetchDevices();
         } catch (err) {
             console.error('Error setting color:', err);
@@ -30,7 +32,7 @@ export const useDevices = () => {
         }
     }, [fetchDevices]);
 
-    const setMode = useCallback(async (deviceId: any, modeId: any) => {
+    const setMode = useCallback(async (deviceId: number, modeId: number) => {
         try {
             await api.setDeviceMode(deviceId, modeId);
             await fetchDevices();
@@ -40,7 +42,45 @@ export const useDevices = () => {
         }
     }, [fetchDevices]);
 
-    const setBrightness = useCallback(async (deviceId: any, brightness: any) => {
+    const setModeWithParams = useCallback(async (
+        deviceId: number,
+        modeId: number,
+        params: { speed?: number; brightness?: number; direction?: number; colors?: RGBColor[]; colorMode?: number },
+    ) => {
+        try {
+            const res = await api.setDeviceModeParams(deviceId, modeId, params);
+            const device = (res.data as { device?: DeviceData })?.device;
+            if (device) {
+                setDevices((prev) => prev.map((d) => (d.id === deviceId ? device : d)));
+            } else {
+                await fetchDevices();
+            }
+        } catch (err) {
+            console.error('Error setting mode params:', err);
+            throw err;
+        }
+    }, [fetchDevices]);
+
+    const saveMode = useCallback(async (
+        deviceId: number,
+        modeId: number,
+        params: { speed?: number; brightness?: number; direction?: number; colors?: RGBColor[]; colorMode?: number } = {},
+    ) => {
+        try {
+            const res = await api.saveDeviceMode(deviceId, modeId, params);
+            const device = (res.data as { device?: DeviceData })?.device;
+            if (device) {
+                setDevices((prev) => prev.map((d) => (d.id === deviceId ? device : d)));
+            } else {
+                await fetchDevices();
+            }
+        } catch (err) {
+            console.error('Error saving mode:', err);
+            throw err;
+        }
+    }, [fetchDevices]);
+
+    const setBrightness = useCallback(async (deviceId: number, brightness: number) => {
         try {
             await api.setDeviceBrightness(deviceId, brightness);
             await fetchDevices();
@@ -50,12 +90,109 @@ export const useDevices = () => {
         }
     }, [fetchDevices]);
 
-    const syncAll = useCallback(async (color: any) => {
+    const syncAll = useCallback(async (color: string, brightness = 100) => {
         try {
-            await api.syncAllDevices(color);
+            await api.syncAllDevices(color, brightness);
             await fetchDevices();
         } catch (err) {
             console.error('Error syncing devices:', err);
+            throw err;
+        }
+    }, [fetchDevices]);
+
+    /** Trigger OpenRGB USB re-enumeration, then refresh the device list. */
+    const rescan = useCallback(async () => {
+        try {
+            setScanning(true);
+            await api.rescanDevices();
+            await fetchDevices();
+        } catch (err) {
+            console.error('Error rescanning devices:', err);
+            throw err;
+        } finally {
+            setScanning(false);
+        }
+    }, [fetchDevices]);
+
+    /** Paint every LED in a single zone. */
+    const setZoneColor = useCallback(async (
+        deviceId: number,
+        zoneId: number,
+        color: string,
+        brightness = 100,
+    ) => {
+        try {
+            await api.setZoneColor(deviceId, zoneId, color, brightness);
+            await fetchDevices();
+        } catch (err) {
+            console.error('Error setting zone color:', err);
+            throw err;
+        }
+    }, [fetchDevices]);
+
+    /** Paint a single LED. Device is automatically put into Direct mode by backend. */
+    const setSingleLed = useCallback(async (
+        deviceId: number,
+        ledId: number,
+        color: string,
+        brightness = 100,
+    ) => {
+        try {
+            await api.setSingleLed(deviceId, ledId, color, brightness);
+        } catch (err) {
+            console.error('Error setting LED color:', err);
+            throw err;
+        }
+    }, []);
+
+    const resizeZone = useCallback(async (deviceId: number, zoneId: number, length: number) => {
+        try {
+            await api.resizeZone(deviceId, zoneId, length);
+            await fetchDevices();
+        } catch (err) {
+            console.error('Error resizing zone:', err);
+            throw err;
+        }
+    }, [fetchDevices]);
+
+    const setSegmentColor = useCallback(async (
+        deviceId: number,
+        zoneId: number,
+        segmentId: number,
+        color: string,
+        brightness = 100,
+    ) => {
+        try {
+            await api.setSegmentColor(deviceId, zoneId, segmentId, color, brightness);
+            await fetchDevices();
+        } catch (err) {
+            console.error('Error setting segment color:', err);
+            throw err;
+        }
+    }, [fetchDevices]);
+
+    const addSegment = useCallback(async (
+        deviceId: number,
+        zoneId: number,
+        name: string,
+        start: number,
+        length: number,
+    ) => {
+        try {
+            await api.addSegment(deviceId, zoneId, name, start, length);
+            await fetchDevices();
+        } catch (err) {
+            console.error('Error adding segment:', err);
+            throw err;
+        }
+    }, [fetchDevices]);
+
+    const clearSegments = useCallback(async (deviceId: number, zoneId: number) => {
+        try {
+            await api.clearSegments(deviceId, zoneId);
+            await fetchDevices();
+        } catch (err) {
+            console.error('Error clearing segments:', err);
             throw err;
         }
     }, [fetchDevices]);
@@ -67,11 +204,21 @@ export const useDevices = () => {
     return {
         devices,
         loading,
+        scanning,
         error,
         refresh: fetchDevices,
+        rescan,
         setColor,
         setMode,
+        setModeWithParams,
+        saveMode,
         setBrightness,
-        syncAll
+        syncAll,
+        setZoneColor,
+        setSingleLed,
+        resizeZone,
+        setSegmentColor,
+        addSegment,
+        clearSegments,
     };
 };

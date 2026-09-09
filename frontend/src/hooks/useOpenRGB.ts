@@ -1,17 +1,17 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-
-const WS_URL = import.meta.env.VITE_API_URL?.replace('http', 'ws') || 'ws://localhost:3001';
+import { wsUrl } from '../api/client';
+import type { WebSocketStatusData } from '../types';
 
 export const useOpenRGB = () => {
     const [connected, setConnected] = useState(false);
     const [deviceCount, setDeviceCount] = useState(0);
-    const [status, setStatus] = useState(null);
-    const wsRef = useRef(null);
-    const reconnectTimeoutRef = useRef(null);
+    const [status, setStatus] = useState<WebSocketStatusData | null>(null);
+    const wsRef = useRef<WebSocket | null>(null);
+    const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const connect = useCallback(() => {
         try {
-            const ws = new WebSocket(WS_URL);
+            const ws = new WebSocket(wsUrl());
 
             ws.onopen = () => {
                 console.log('✅ WebSocket connected');

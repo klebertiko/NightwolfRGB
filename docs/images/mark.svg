@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Nightwolf">
+  <rect width="64" height="64" rx="12" fill="#0c0b0a"/>
+  <path fill="#f3ead8" d="M18 8 26 20 14 24 16 38 32 58 48 38 50 24 38 20 46 8 40 20 32 16 24 20Z"/>
+  <path fill="#0c0b0a" d="M24 28 32 50 40 28 32 34Z"/>
+  <circle cx="39.5" cy="27.5" r="4.2" fill="#ff4d8d"/>
+</svg>

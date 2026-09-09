@@ -1,10 +1,8 @@
 import React, { useMemo } from 'react';
 import { ChevronRight } from 'lucide-react';
-import type { DeviceData, Profile } from '../types';
-import { activeModeName, deviceLeds, deviceWash, kindLabel } from '../lib/device';
+import type { DeviceData, OpenRgbPlugin, Profile } from '../types';
+import { activeModeName, deviceLeds, deviceWash, kindLabel, ledHonesty, WASH_PRESETS } from '../lib/device';
 import { ChassisGhost, slotForDevice } from './ChassisGhost';
-
-const PRESETS = ['#c9897a', '#d45c5c', '#c4a35a', '#6f9e6a', '#4a7ea8', '#f3ead8'];
 const BRIGHT_STEPS = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
 interface DashboardProps {
@@ -20,6 +18,11 @@ interface DashboardProps {
     onBrightness: (value: number) => void;
     onSaveScene: () => void;
     onPaintAll: () => void;
+    onRescan?: () => void;
+    scanning?: boolean;
+    plugins?: OpenRgbPlugin[];
+    nativeProfiles?: string[];
+    onLoadNative?: (name: string) => void;
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({
@@ -35,10 +38,23 @@ export const Dashboard: React.FC<DashboardProps> = ({
     onBrightness,
     onSaveScene,
     onPaintAll,
+    onRescan,
+    scanning = false,
+    plugins = [],
+    nativeProfiles = [],
+    onLoadNative,
 }) => {
     const leadMode = devices[0] ? activeModeName(devices[0]) : null;
     const ring = 2 * Math.PI * 28;
     const ringOn = (brightness / 100) * ring;
+    const fills = useMemo(() => {
+        const map: Record<string, string> = {};
+        for (const device of devices) {
+            const kind = kindLabel(device);
+            if (!map[kind]) map[kind] = deviceWash(device, globalColor);
+        }
+        return map;
+    }, [devices, globalColor]);
     const hotspots = useMemo(() => {
         const used = new Set<string>();
         return devices.map((device) => ({ device, slot: slotForDevice(device, used) }));
@@ -58,6 +74,16 @@ export const Dashboard: React.FC<DashboardProps> = ({
                                 ? 'O SDK está no ar, mas nenhum device RGB respondeu.'
                                 : 'Liga o lighting do PC. O palco e a lista aparecem aqui.'}
                         </p>
+                        {onRescan && (
+                            <button
+                                type="button"
+                                onClick={onRescan}
+                                disabled={scanning}
+                                className="mt-4 min-h-9 px-4 nw-body font-semibold bg-ink text-graphite-950 rounded-lg disabled:opacity-50"
+                            >
+                                {scanning ? 'Detectando…' : 'Redigitalizar'}
+                            </button>
+                        )}
                     </div>
                 )}
                 {devices.length > 0 && (
@@ -86,6 +112,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
                                         </span>
                                         <span className="nw-chip">{brightness}%</span>
                                         <span className="nw-chip">{leadMode || 'sync'}</span>
+                                        {plugins.length > 0 && (
+                                            <span className="nw-chip">{plugins.length} plugin{plugins.length === 1 ? '' : 's'}</span>
+                                        )}
                                     </div>
                                 </header>
                                 <div className="relative flex-1 min-h-0 mx-4 mb-2">
@@ -95,7 +124,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                                         className="absolute inset-0 text-ink-mute"
                                         aria-label="Pintar tudo"
                                     >
-                                        <ChassisGhost color={globalColor} className="h-full w-full max-h-[22rem] mx-auto" />
+                                        <ChassisGhost color={globalColor} fills={fills} className="h-full w-full max-h-[22rem] mx-auto" />
                                     </button>
                                     {hotspots.map(({ device, slot }) => {
                                         const color = deviceWash(device, globalColor);
@@ -128,7 +157,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
                                     {devices.map((device) => {
                                         const color = deviceWash(device, globalColor);
                                         const tape = deviceLeds(device, color, 12);
-                                        const leds = device.ledCount || device.leds?.length || 0;
                                         const mode = activeModeName(device);
                                         return (
                                             <button
@@ -144,7 +172,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
                                                 <span className="min-w-0 flex-1">
                                                     <span className="nw-body block text-ink truncate">{device.name}</span>
                                                     <span className="nw-meta block text-ink-mute">
-                                                        {kindLabel(device)} · {leds} LED
+                                                        {kindLabel(device)}
+                                                        {device.vendor ? ` · ${device.vendor}` : ''}
+                                                        {' · '}
+                                                        {ledHonesty(device)}
                                                         {mode ? ` · ${mode}` : ''}
                                                     </span>
                                                 </span>
@@ -183,7 +214,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                             className="w-8 h-8"
                             aria-label="Escolher cor"
                         />
-                        {PRESETS.map((c) => (
+                        {WASH_PRESETS.map((c) => (
                             <button
                                 key={c}
                                 type="button"
@@ -275,6 +306,22 @@ export const Dashboard: React.FC<DashboardProps> = ({
                         Salvar cena
                     </button>
                 </section>
+
+                {nativeProfiles.length > 0 && (
+                    <section className="nw-dock p-3 space-y-2">
+                        <h2 className="nw-kicker text-ink-mute">Perfis OpenRGB</h2>
+                        {nativeProfiles.slice(0, 6).map((name) => (
+                            <button
+                                key={name}
+                                type="button"
+                                onClick={() => onLoadNative?.(name)}
+                                className="w-full text-left px-2.5 py-2 rounded-xl border border-ink/10 hover:border-ember/50 nw-body text-ink truncate"
+                            >
+                                {name}
+                            </button>
+                        ))}
+                    </section>
+                )}
             </aside>
         </div>
     );

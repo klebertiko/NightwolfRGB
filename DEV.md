@@ -17,8 +17,8 @@ ou
 ### Opção 2: Manual
 
 ```bash
-# Como administrador
-npm run dev
+# Como administrador, na raiz do repo
+npm run desktop
 ```
 
 ## 📋 Pré-requisitos
@@ -28,10 +28,11 @@ npm run dev
 - ✅ OpenRGB binário em `bin/OpenRGB/`
 - ✅ **Executar como Administrador** (requerido pelo OpenRGB)
 
-## 🎯 Acesso
+## Acesso
 
-- **Frontend**: http://localhost:5173/
-- **Backend API**: http://localhost:3001/
+- **App**: janela nativa (`npm run desktop`)
+- **Renderer (dev)**: Vite em http://127.0.0.1:5173 (não é o produto)
+- **Backend API**: http://127.0.0.1:3001/
 - **OpenRGB SDK**: localhost:6742
 
 ## 🛑 Parar os Servidores

@@ -1,24 +1,47 @@
 # OpenRGB Binaries
 
-This directory should contain the OpenRGB executable files.
+Nightwolf starts this copy automatically. Do not brand it in the UI.
 
-## Download OpenRGB
+## Update
 
-Download the latest OpenRGB release from:
-https://openrgb.org/releases.html
+From the project root. OpenRGB is the only third-party binary bundle (`bin/OpenRGB/`). Electron, `openrgb-sdk`, and the rest of the app update via npm — there is no packaged `.exe` auto-update yet.
 
-## Required Files
+Default (OpenRGB + npm trees):
 
-Place the following files in this directory:
-- `OpenRGB.exe` (Windows executable)
-- All `.dll` files from the OpenRGB package
+```
+npm run update
+```
 
-## Why not in Git?
+Inventory only (no download, no `npm update`):
 
-The OpenRGB binaries are large files (20-50MB) and are frequently updated. 
-Instead of storing them in the repository, download them directly from the official source.
+```
+npm run update -- --dry-run
+```
 
-## Auto-Start Configuration
+OpenRGB binary only, or npm trees only:
 
-The Nightwolf RGB backend can automatically start OpenRGB for you.
-Set `AUTO_START_OPENRGB=true` in your `backend/.env` file.
+```
+npm run update:bundles
+npm run update:app
+```
+
+Pin an OpenRGB Codeberg tag:
+
+```
+npm run update -- --tag release_candidate_1.0rc3.1
+```
+
+Low-level OpenRGB command (same download as `update:bundles`):
+
+```
+npm run openrgb:update
+npm run openrgb:update -- --tag release_candidate_1.0rc3.1
+```
+
+Writes `OpenRGB.exe`, DLLs, and `VERSION.json` here. Binaries stay gitignored.
+
+Source: https://codeberg.org/OpenRGB/OpenRGB/releases
+
+## Auto-start
+
+Set `AUTO_START_OPENRGB=true` in `backend/.env`.
