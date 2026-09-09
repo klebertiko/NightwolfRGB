@@ -1,13 +1,209 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --live: #ff4d8d;
+  --ember: var(--live);
+  color-scheme: dark;
+}
+
+/* Hallmark · genre: atmospheric · macrostructure: Workbench · design-system: design.md · designed-as-app */
+
+.nw-tile {
+  border-radius: 0.875rem;
+  border: 1px solid rgb(243 234 216 / 0.08);
+  background: #141210;
+  box-shadow: 0 18px 40px rgb(0 0 0 / 0.35);
+}
+
+.nw-tile-live {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--tile-live, var(--live)) 22%, transparent),
+    0 10px 22px color-mix(in srgb, var(--tile-live, var(--live)) 12%, transparent);
+}
+
+.nw-stage {
+  border-radius: 12px;
+  border: 1px solid rgb(243 234 216 / 0.08);
+  background: #141210;
+  box-shadow: 0 18px 40px rgb(0 0 0 / 0.4);
+}
+
+.nw-float {
+  border-radius: 1rem;
+  border: 1px solid rgb(243 234 216 / 0.12);
+  background: rgb(20 18 16 / 0.92);
+  box-shadow: 0 16px 32px rgb(0 0 0 / 0.45);
+}
+
+.nw-dock {
+  border-radius: 12px;
+  border: 1px solid rgb(243 234 216 / 0.1);
+  background: #141210;
+}
+
+.nw-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 1.25rem;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8a8172;
+  background: #1c1a17;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+  background: #0c0b0a;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: #f3ead8;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+}
+
+.app-drag {
+  -webkit-app-region: drag;
+}
+
+.app-no-drag {
+  -webkit-app-region: no-drag;
+}
+
+input[type='range'] {
+  appearance: none;
+  height: 2px;
+  background: #2a2622;
+  border-radius: 999px;
+  outline: none;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--live);
+  cursor: pointer;
+}
+
+input[type='color'] {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type='color']::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+input[type='color']::-webkit-color-swatch {
+  border: 0;
+  border-radius: 4px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--live);
+  outline-offset: 2px;
+}
+
+.nw-search :focus-visible {
+  outline: none;
+}
+
+.nw-search-panel {
+  background: #141210;
+  box-shadow: 0 24px 48px rgb(0 0 0 / 0.55);
+}
+
+.nw-search-list {
+  scrollbar-width: thin;
+  scrollbar-color: #2a2622 transparent;
+}
+
+.nw-search-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.nw-search-list::-webkit-scrollbar-thumb {
+  background: #2a2622;
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Type-role layer ─────────────────────────────────────────────────────────
+   Five locked roles. Apply by semantic class; size set per-instance where
+   the role spans a range (Display, Numeral). Never invent a sixth family.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Display — Syne 700 · one page title per view */
+.nw-display {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: -0.03em;
+  line-height: 1.3; /* was 1.1 — increased so Syne 700 descenders (g, p, y) clear the line box */
+}
+
+/* Body — IBM Plex Sans 400–500 · UI copy, nav labels, list rows */
+.nw-body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+
+/* Kicker — IBM Plex Sans 500 · section headings (NOT mono) */
+.nw-kicker {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+/* Meta — IBM Plex Mono 400–500 · status bar, shortcuts, kbd, connection
+   chips, numeric units. Machine-readable strings only. */
+.nw-meta {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+/* Numeral — IBM Plex Sans 600 tabular-nums · big value readouts */
+.nw-num {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
 }

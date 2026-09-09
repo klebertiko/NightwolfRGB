@@ -23,7 +23,8 @@ interface RunningEffect {
 class EffectsEngine {
     private currentEffect: RunningEffect | null = null;
     private devices: any[] = [];
-    private fps: number = 30; // Frames per second
+    private fps: number = 20;
+    private busy = false;
 
     constructor() {
         this.currentEffect = null;
@@ -60,7 +61,7 @@ class EffectsEngine {
 
         if (type === 'static') {
             this.currentEffect = { type, options, startTime: Date.now(), interval: null };
-            this.applyColorToAll(color);
+            void this.applyColorToAll(color);
             return { success: true, message: `Effect ${type} started` };
         }
 
@@ -85,26 +86,34 @@ class EffectsEngine {
     }
 
     private tick(type: EffectType, options: EffectOptions) {
-        if (!this.devices.length) return;
+        if (this.busy || !this.devices.length) return;
+        this.busy = true;
+        void this.paintFrame(type, options).finally(() => {
+            this.busy = false;
+        });
+    }
 
+    private async paintFrame(type: EffectType, options: EffectOptions) {
         const time = Date.now() - (this.currentEffect?.startTime || 0);
-        const speed = (options.speed || 50) / 50; // Normalize to around 1.0
+        const speed = (options.speed || 50) / 50;
 
-        // Calculate global color for this frame
+        const spatial = type === 'rainbow' || type === 'spectrum';
+        if (spatial) {
+            const period = (type === 'spectrum' ? 10000 : 5000) / speed;
+            await this.applyPerLed((i, n) => {
+                const hue = ((time / period) * 360 + (n ? (i / n) * 360 : 0)) % 360;
+                return hslToRgb(hue, 1, 0.5);
+            });
+            return;
+        }
+
         let frameColor: RGBColor;
-
         switch (type) {
             case 'breathing':
                 frameColor = this.calculateBreathing(time, speed, options.color || '#FF0000');
                 break;
-            case 'rainbow':
-                frameColor = this.calculateRainbow(time, speed);
-                break;
             case 'strobing':
                 frameColor = this.calculateStrobing(time, speed, options.color || '#FFFFFF');
-                break;
-            case 'spectrum':
-                frameColor = this.calculateSpectrum(time, speed);
                 break;
             case 'custom':
                 frameColor = this.calculateCustom(time, speed, options.colors || ['#FF0000', '#0000FF']);
@@ -115,17 +124,28 @@ class EffectsEngine {
                 break;
         }
 
-        // Apply to all devices
-        this.applyColorToAll(frameColor);
+        await this.applyColorToAll(frameColor);
     }
 
-    private applyColorToAll(color: RGBColor) {
-        this.devices.forEach(device => {
-            // Create array of colors for this device (all LEDs same color for now)
-            // Future: Per-LED effects
-            const colors = Array(device.ledCount).fill(color);
-            openrgb.updateLeds(device.id, colors);
-        });
+    private paintableCount(device: any): number {
+        return Math.max(0, device.ledCount || device.leds?.length || 0);
+    }
+
+    private async applyColorToAll(color: RGBColor) {
+        for (const device of this.devices) {
+            const n = this.paintableCount(device);
+            if (n === 0) continue;
+            await openrgb.updateLeds(device.id, Array(n).fill(color));
+        }
+    }
+
+    private async applyPerLed(fn: (ledIndex: number, ledCount: number) => RGBColor) {
+        for (const device of this.devices) {
+            const n = this.paintableCount(device);
+            if (n === 0) continue;
+            const colors = Array.from({ length: n }, (_, i) => fn(i, n));
+            await openrgb.updateLeds(device.id, colors);
+        }
     }
 
     // --- Effect Algorithms ---
@@ -142,18 +162,6 @@ class EffectsEngine {
             green: Math.floor(baseColor.green * brightness),
             blue: Math.floor(baseColor.blue * brightness)
         };
-    }
-
-    private calculateRainbow(time: number, speed: number): RGBColor {
-        // Cycle Hue 0-360
-        const period = 5000 / speed;
-        const hue = ((time % period) / period) * 360;
-        return hslToRgb(hue, 1, 0.5);
-    }
-
-    private calculateSpectrum(time: number, speed: number): RGBColor {
-        // Slower rainbow
-        return this.calculateRainbow(time, speed * 0.5);
     }
 
     private calculateStrobing(time: number, speed: number, hexColor: string): RGBColor {
@@ -192,7 +200,9 @@ class EffectsEngine {
         return {
             active: !!this.currentEffect,
             effect: this.currentEffect?.type || 'none',
-            options: this.currentEffect?.options
+            options: this.currentEffect?.options,
+            engine: 'nightwolf-direct',
+            audio: false,
         };
     }
 }

@@ -3,14 +3,37 @@
     "version": "1.0.0",
     "description": "Nightwolf RGB - Advanced RGB Control Interface",
     "private": true,
+    "productName": "Nightwolf RGB",
+    "main": "electron/main.cjs",
     "scripts": {
         "dev": "npx concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
         "dev:backend": "cd backend && npm run dev",
         "dev:frontend": "cd frontend && npm run dev",
+        "desktop": "node scripts/free-desktop-ports.cjs && npx concurrently -k \"npm run dev:frontend\" \"node scripts/run-desktop-electron.cjs\"",
+        "desktop:stop": "node scripts/free-desktop-ports.cjs",
+        "desktop:bin": "node scripts/stamp-electron-icon.cjs && npx electron .",
+        "ci": "node scripts/ci-gates.cjs",
+        "secrets-scan": "node scripts/secrets-scan.cjs",
+        "pack:release": "node scripts/pack-release.cjs",
+        "test:windows-identity": "node --test scripts/windows-app-identity.test.cjs",
+        "test:ci": "node --test scripts/lighting-engine.test.cjs scripts/type-roles.test.cjs scripts/chrome-ia.test.cjs scripts/openrgb-parity.test.cjs scripts/windows-app-identity.test.cjs scripts/desktop-shutdown.test.cjs scripts/pack-release.test.cjs scripts/secrets-scan.test.cjs",
+        "brand": "node scripts/update-brand.cjs",
+        "update": "node scripts/update.cjs",
+        "update:app": "node scripts/update.cjs --app",
+        "update:bundles": "node scripts/update.cjs --bundles",
+        "test:update": "node --test scripts/update.test.cjs",
+        "test:engine": "node --test scripts/lighting-engine.test.cjs",
+        "test:type-roles": "node --test scripts/type-roles.test.cjs",
+        "test:chrome-ia": "node --test scripts/chrome-ia.test.cjs",
+        "test:openrgb-parity": "node --test scripts/openrgb-parity.test.cjs",
+        "openrgb:update": "node scripts/update-openrgb.cjs",
         "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
     },
     "devDependencies": {
-        "concurrently": "^8.2.2"
+        "concurrently": "^8.2.2",
+        "electron": "^33.2.1",
+        "rcedit": "^5.0.2",
+        "wait-on": "^8.0.1"
     },
     "keywords": [
         "rgb",

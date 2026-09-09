@@ -20,9 +20,9 @@ if %errorLevel% == 0 (
 
 :run
 cd /d "%~dp0"
-echo 🚀 Starting Backend + Frontend...
+echo Starting Nightwolf RGB desktop...
 echo.
-call npm run dev
+call npm run desktop
 
 if %errorLevel% neq 0 (
     echo.

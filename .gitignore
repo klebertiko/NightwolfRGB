@@ -93,6 +93,8 @@ bin/OpenRGB/*.so
 bin/OpenRGB/*.dylib
 # Keep the directory structure with a README
 !bin/OpenRGB/README.md
+bin/OpenRGB/VERSION.json
+brand/derived/
 
 # === Database Files ===
 *.sqlite

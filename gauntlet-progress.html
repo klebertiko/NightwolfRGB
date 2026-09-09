@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nightwolf RGB · Gauntlet Progress</title>
+  <style>
+    :root {
+      --paper: #0c0b0a;
+      --panel: #141210;
+      --inset: #1c1a17;
+      --live: #ff4d8d;
+      --ink: #f3ead8;
+      --ink-mute: color-mix(in srgb, var(--ink) 62%, var(--paper));
+      --ink-dim: color-mix(in srgb, var(--ink) 38%, var(--paper));
+      --green: #6f9e6a;
+      --amber: #c4a35a;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+      --font-sans: "IBM Plex Sans", sans-serif;
+      --rule: 1px solid var(--inset);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 2rem 1rem;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    .wrap { max-width: 56rem; margin-inline: auto; }
+
+    h1 {
+      font-family: var(--font-sans);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.25rem;
+      color: var(--ink);
+    }
+
+    .meta {
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      margin: 0 0 2rem;
+    }
+
+    h2 {
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      margin: 2rem 0 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: var(--rule);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+
+    th {
+      text-align: left;
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      padding: 0.375rem 0.75rem 0.375rem 0;
+      border-bottom: var(--rule);
+    }
+
+    td {
+      padding: 0.625rem 0.75rem 0.625rem 0;
+      vertical-align: top;
+      border-bottom: var(--rule);
+      color: var(--ink-mute);
+    }
+
+    td:first-child { color: var(--ink); white-space: nowrap; }
+
+    .badge {
+      display: inline-block;
+      padding: 0.125rem 0.375rem;
+      border-radius: 2px;
+      font-size: 0.5625rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .win  { background: color-mix(in srgb, var(--green) 18%, transparent); color: var(--green); }
+    .bar  { background: color-mix(in srgb, var(--live)  18%, transparent); color: var(--live);  }
+    .gap  { background: color-mix(in srgb, var(--amber) 18%, transparent); color: var(--amber); }
+    .done { background: color-mix(in srgb, var(--green) 12%, transparent); color: var(--green); }
+    .todo { background: color-mix(in srgb, var(--amber) 12%, transparent); color: var(--amber); }
+
+    .evidence {
+      font-size: 0.75rem;
+      color: var(--ink-dim);
+      margin-top: 0.25rem;
+    }
+
+    ul {
+      margin: 0.5rem 0 0;
+      padding-left: 1.25rem;
+      color: var(--ink-mute);
+    }
+
+    li { margin-bottom: 0.25rem; }
+
+    .note {
+      margin-top: 2rem;
+      padding: 0.75rem 1rem;
+      background: var(--panel);
+      border-left: 3px solid var(--amber);
+      font-size: 0.75rem;
+      color: var(--ink-dim);
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Nightwolf RGB · Gauntlet Progress</h1>
+  <p class="meta">8 set 2026 · round 1 completo · landing reconstruída</p>
+
+  <!-- ── Round 1 Verdicts ── -->
+  <h2>Round 1 — Veredictos</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Categoria</th>
+        <th>Resultado</th>
+        <th>Oponente</th>
+        <th>Evidência / Gap</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Feature copy</td>
+        <td><span class="badge win">Nosso</span></td>
+        <td>iCUE</td>
+        <td>Nossa lista de features venceu. Cópia mais honesta e específica.</td>
+      </tr>
+      <tr>
+        <td>Repo path</td>
+        <td><span class="badge win">Nosso</span></td>
+        <td>GitHub Desktop</td>
+        <td>Caminho de clone/run mais claro que o competidor.</td>
+      </tr>
+      <tr>
+        <td>Primeira tela mobile</td>
+        <td><span class="badge bar">Bar (Signal)</span></td>
+        <td>Signal.org mobile</td>
+        <td>
+          Product visual era um thumbnail; fold lia como pilha de texto.
+          <div class="evidence">Screenshot abaixo do botão Baixar era um retângulo pequeno, chrome ilegível.</div>
+        </td>
+      </tr>
+      <tr>
+        <td>Product imagery / hero</td>
+        <td><span class="badge bar">Bar (Signal)</span></td>
+        <td>Signal.org</td>
+        <td>
+          Studio shot era um cartão postal em fundo preto — janela do app não era o objeto central.
+          <div class="evidence">Evidência: imagem do Studio como thumbnail, chrome ilegível.</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ── Changes Applied in this Rebuild ── -->
+  <h2>Mudanças aplicadas · rebuild 8 set 2026</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Status</th>
+        <th>Detalhe</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Hero proof — mobile-first</td>
+        <td><span class="badge done">Done</span></td>
+        <td><code>order: -1</code> em <code>.proof</code> abaixo de 60 rem — screenshot aparece antes do copy em 375 px.</td>
+      </tr>
+      <tr>
+        <td>Hero proof — desktop</td>
+        <td><span class="badge done">Done</span></td>
+        <td><code>width: 112%</code> em coluna 1.2 fr, overflow visual para o topo-direito da coluna.</td>
+      </tr>
+      <tr>
+        <td>Links não-rosas</td>
+        <td><span class="badge done">Done</span></td>
+        <td><code>a { color: var(--ink-mute) }</code> — <code>--live</code> removido de todos os links.</td>
+      </tr>
+      <tr>
+        <td>Strip labels não-rosas</td>
+        <td><span class="badge done">Done</span></td>
+        <td><code>.strip-list dt { color: var(--ink) }</code> — feature labels em ink, não live.</td>
+      </tr>
+      <tr>
+        <td>Wash chips — paleta de predefinições</td>
+        <td><span class="badge done">Done</span></td>
+        <td>6 swatches de cor (terracota, vermelho, ouro, verde, azul, branco) como dados do app.</td>
+      </tr>
+      <tr>
+        <td>Download band — CTA único</td>
+        <td><span class="badge done">Done</span></td>
+        <td>Apenas um botão primário "Baixar" (<code>--live</code>). <code>npm install</code> movido para seção Código aberto.</td>
+      </tr>
+      <tr>
+        <td>Clone command — Código aberto</td>
+        <td><span class="badge done">Done</span></td>
+        <td><code>npm install</code> + <code>npm run desktop</code> em <code>&lt;pre&gt;</code> dentro da seção Código aberto, separado visualmente.</td>
+      </tr>
+      <tr>
+        <td>Copy pt-BR marketing</td>
+        <td><span class="badge done">Done</span></td>
+        <td>Hero, strip, features, download, Código aberto e footer reescritos. Feel: Signal + iCUE, honesto.</td>
+      </tr>
+      <tr>
+        <td>Screenshots recapturadas</td>
+        <td><span class="badge todo">Pendente</span></td>
+        <td>
+          App não estava rodando durante o rebuild. PNGs não existem em <code>docs/images/</code>.
+          <div class="evidence">Precisam ser capturados manualmente com app rodando no Windows + OpenRGB SDK up.</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ── Screenshot capture guide ── -->
+  <h2>Guia de captura de screenshots</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Arquivo</th>
+        <th>Vista</th>
+        <th>Cor / estado</th>
+        <th>Tamanho alvo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>docs/images/studio.png</code></td>
+        <td>Studio</td>
+        <td>Wash azul (#4a7ea8), SDK ligada, B550M GAMING X WIFI6 no palco.</td>
+        <td>1600 × 900</td>
+      </tr>
+      <tr>
+        <td><code>docs/images/luz.png</code></td>
+        <td>Luz</td>
+        <td>Swatch verde (#6f9e6a) selecionado, brilho 98, modos hardware visíveis.</td>
+        <td>1600 × 900</td>
+      </tr>
+      <tr>
+        <td><code>docs/images/efeitos.png</code></td>
+        <td>Efeitos</td>
+        <td>Rainbow ativo — gradiente multi-cor no device, slider velocidade 50.</td>
+        <td>1600 × 900</td>
+      </tr>
+      <tr>
+        <td><code>docs/images/cenas.png</code></td>
+        <td>Cenas</td>
+        <td>Vista vazia (estado inicial), botão "Nova cena" visível.</td>
+        <td>1600 × 900</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ── Round 2 scope ── -->
+  <h2>Round 2 — Escopo sugerido</h2>
+  <ul>
+    <li>Recapturar screenshots com as washes corretas e validar que o hero shot lê bem em 375 px.</li>
+    <li>Comparar layout do hero (screenshot-first mobile) com Signal.org mobile.</li>
+    <li>Avaliar se wash chips precisam de texto explicativo para leitores de tela.</li>
+    <li>Medir Lighthouse (perf + a11y) após screenshots serem adicionadas.</li>
+  </ul>
+
+  <div class="note">
+    Nota: gauntlet-progress.html é artefato interno. Não entra no <code>docs/</code> e não é publicado via GitHub Pages.
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+# Publish a GitHub Release only after Validate passes.
+# No skip, no continue-on-error, no .exe installer — zip + install scripts.
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (v1.2.3). Publish happens only if every gate passes."
+        required: true
+        type: string
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    uses: ./.github/workflows/validate.yml
+
+  pack:
+    needs: validate
+    if: needs.validate.result == 'success'
+    runs-on: windows-latest
+    timeout-minutes: 40
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install
+        run: npm run install:all
+
+      - name: Fetch OpenRGB engine
+        run: node scripts/update-openrgb.cjs
+
+      - name: Pack zip (refuses if OpenRGB.exe is missing)
+        run: node scripts/pack-release.cjs
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+          name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: |
+            dist/release/nightwolf-windows-x64.zip
+            dist/release/install.ps1
+            dist/release/install.sh
