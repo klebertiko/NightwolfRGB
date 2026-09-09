@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <title>Nightwolf RGB — o RGB do PC, no seu controle</title>
-  <meta name="description" content="O motor é o OpenRGB. Nightwolf é 100% compatível e traz o OpenRGB no bundle. Pinte o RGB do PC. Sem conta. GitHub Releases.">
+  <meta name="description" content="O motor é o OpenRGB. Nightwolf é 100% compatível e traz o OpenRGB no bundle. Pinte o RGB do PC. Sem conta. irm | iex.">
   <meta name="author" content="klebertiko">
   <link rel="canonical" href="https://klebertiko.github.io/NightwolfRGB/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://klebertiko.github.io/NightwolfRGB/">
   <meta property="og:title" content="Nightwolf RGB — o RGB do PC, no seu controle">
-  <meta property="og:description" content="O motor é o OpenRGB. Nightwolf é 100% compatível e sobe com o OpenRGB no bundle. GitHub Releases.">
+  <meta property="og:description" content="O motor é o OpenRGB. Nightwolf é 100% compatível e sobe com o OpenRGB no bundle. irm | iex.">
   <meta property="og:image" content="https://klebertiko.github.io/NightwolfRGB/images/studio.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Nightwolf RGB — o RGB do PC, no seu controle">
-  <meta name="twitter:description" content="App para Windows. OpenRGB no bundle. Pinte zona e LED, grave perfil .orp. GitHub Releases.">
+  <meta name="twitter:description" content="App para Windows. OpenRGB no bundle. Pinte zona e LED, grave perfil .orp. irm | iex.">
   <meta name="twitter:image" content="https://klebertiko.github.io/NightwolfRGB/images/studio.png">
-  <link rel="icon" type="image/svg+xml" href="images/mark.svg?v=20260909d">
-  <link rel="alternate icon" type="image/png" href="images/icon.png?v=20260909d">
-  <link rel="apple-touch-icon" href="images/icon.png?v=20260909d">
+  <link rel="icon" type="image/svg+xml" href="images/mark.svg?v=20260909e">
+  <link rel="alternate icon" type="image/png" href="images/icon.png?v=20260909e">
+  <link rel="apple-touch-icon" href="images/icon.png?v=20260909e">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700&display=swap" rel="stylesheet">
@@ -83,6 +83,11 @@
       max-width: 100%;
       height: auto;
       display: block;
+    }
+
+    p code {
+      font-family: var(--font-mono);
+      font-size: 0.875em;
     }
 
     /* Links are ink, not --live. --live reserved for primary Baixar only. */
@@ -344,6 +349,46 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--ink-dim);
+    }
+
+    .install-steps {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-m);
+      margin: var(--space-m) auto 0;
+      max-width: 40rem;
+      text-align: left;
+      min-width: 0;
+    }
+
+    .install-steps h3 {
+      margin: 0 0 var(--space-2xs);
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-style: normal;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+
+    .install-steps pre {
+      margin: 0;
+      padding: var(--space-s);
+      background: var(--inset);
+      border: var(--rule);
+      border-radius: var(--radius);
+      min-width: 0;
+    }
+
+    .install-steps code {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      line-height: 1.45;
+      color: var(--ink);
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
     }
 
     /* OpenRGB engine — visible, not a footnote */
@@ -665,7 +710,7 @@
       margin-bottom: 0;
     }
 
-    /* ── Download band — single CTA, no code here ── */
+    /* ── Download band — one primary jump, then the real install lines ── */
     .download {
       background: var(--panel);
       padding-block: var(--space-2xl);
@@ -785,14 +830,14 @@
   <header>
     <div class="wrap mast">
       <a class="wordmark" href="./">
-        <img src="images/mark.svg?v=20260909d" width="24" height="24" alt="">
+        <img src="images/mark.svg?v=20260909e" width="24" height="24" alt="">
         <span class="wordmark-name">Nightwolf</span>
         <span class="wordmark-rgb">RGB</span>
       </a>
       <nav class="mast-links" aria-label="Principal">
         <a class="mast-aux" href="https://openrgb.org/" rel="noopener noreferrer">OpenRGB</a>
         <a class="mast-aux" href="https://github.com/klebertiko/NightwolfRGB" rel="noopener noreferrer">Código</a>
-        <a class="btn btn--compact" href="https://github.com/klebertiko/NightwolfRGB/releases" rel="noopener noreferrer">Baixar</a>
+        <a class="btn btn--compact" href="#baixar">Baixar</a>
       </nav>
     </div>
   </header>
@@ -804,8 +849,8 @@
         <h1 id="hero-title">O RGB do PC, no seu controle.</h1>
         <p class="lead">Sem iCUE. Sem conta. O OpenRGB vem no bundle — 100% compatível. Você pinta o hardware. Pronto.</p>
         <div class="hero-cta">
-          <a class="btn" href="https://github.com/klebertiko/NightwolfRGB/releases" rel="noopener noreferrer">Baixar</a>
-          <small>GitHub Releases</small>
+          <a class="btn" href="#baixar">Baixar</a>
+          <small>irm | iex</small>
         </div>
       </div>
       <figure class="proof">
@@ -885,7 +930,7 @@
     <section class="wrap why" aria-labelledby="why-title">
       <div class="why-head">
         <h2 id="why-title">O que o OpenRGB expõe, o Nightwolf pinta.</h2>
-        <p>Sem nuvem. Sem celular. Sem loja de plugin. Atualiza o OpenRGB do bundle pelo app — o .exe do Nightwolf não se baixa sozinho na rede.</p>
+        <p>Sem nuvem. Sem celular. Sem loja de plugin. Atualizar no app e <code>nightwolfrgb update</code> puxam a release no GitHub e checam o OpenRGB do bundle. Não há Setup.exe.</p>
       </div>
 
       <article class="feat">
@@ -934,9 +979,19 @@
     <section class="download" id="baixar" aria-labelledby="baixar-title">
       <div class="wrap">
         <h2 id="baixar-title">Baixa. Pinta. Acabou.</h2>
-        <p>Windows. OpenRGB no bundle. Sem loja, sem celular, sem conta. GitHub Releases.</p>
+        <p>Windows. O zip mora no GitHub Releases. O script instala — PowerShell ou Git Bash. Depois, <code>nightwolfrgb update</code> ou Atualizar no app. Os dois também checam o OpenRGB.</p>
+        <div class="install-steps">
+          <div>
+            <h3>PowerShell</h3>
+            <pre><code>irm https://github.com/klebertiko/NightwolfRGB/releases/latest/download/install.ps1 | iex</code></pre>
+          </div>
+          <div>
+            <h3>Git Bash</h3>
+            <pre><code>curl -fsSL https://github.com/klebertiko/NightwolfRGB/releases/latest/download/install.sh | bash</code></pre>
+          </div>
+        </div>
         <div class="download-cta">
-          <a class="btn" href="https://github.com/klebertiko/NightwolfRGB/releases" rel="noopener noreferrer">Baixar</a>
+          <a class="btn btn--ghost" href="https://github.com/klebertiko/NightwolfRGB/releases" rel="noopener noreferrer">Ver o zip</a>
           <a class="btn btn--ghost" href="https://github.com/klebertiko/NightwolfRGB" rel="noopener noreferrer">Código-fonte</a>
         </div>
       </div>
@@ -944,7 +999,7 @@
 
     <section class="wrap involved" aria-labelledby="involved-title">
       <div class="involved-mark">
-        <img src="images/icon.png?v=20260909d" width="72" height="72" alt="Nightwolf RGB">
+        <img src="images/icon.png?v=20260909e" width="72" height="72" alt="Nightwolf RGB">
         <div>
           <h2 id="involved-title">Código aberto. Fork à vontade.</h2>
           <p>Issues e pull requests em <a href="https://github.com/klebertiko/NightwolfRGB" rel="noopener noreferrer">klebertiko/NightwolfRGB</a>. Motor: <a href="https://openrgb.org/" rel="noopener noreferrer">OpenRGB</a>. Para rodar do clone:</p>
