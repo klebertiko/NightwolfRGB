@@ -71,7 +71,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700&display=swap" rel="stylesheet">
   <style>
     /* Hallmark · genre: atmospheric · macrostructure: Photographic · tone: cinematic · anchor: --live */
-    /* Hallmark · nav: console mast · footer: Ft5 · design-system: design.md */
+    /* Hallmark · nav: console mast · footer: thin site-foot · design-system: design.md */
     /* Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V5 */
     :root {
       --paper: #0c0b0a;
@@ -558,8 +558,7 @@
     }
 
     /* Text bands */
-    .band,
-    .involved {
+    .band {
       padding-block: var(--space-2xl);
     }
 
@@ -584,8 +583,7 @@
       to { opacity: 1; transform: none; }
     }
 
-    .band h2,
-    .involved h2 {
+    .band h2 {
       margin: 0;
       max-width: 22rem;
       font-family: var(--font-display);
@@ -597,8 +595,7 @@
       overflow-wrap: anywhere;
     }
 
-    .band p,
-    .involved p {
+    .band p {
       margin: var(--space-s) 0 0;
       max-width: var(--measure);
       color: var(--ink-mute);
@@ -617,8 +614,7 @@
     }
 
     @media (min-width: 60rem) {
-      .band,
-      .involved {
+      .band {
         padding-block: var(--space-3xl);
       }
     }
@@ -795,70 +791,55 @@
       height: 1rem;
     }
 
-    .involved-mark {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      gap: var(--space-m);
-      min-width: 0;
-    }
-
-    .involved-mark img {
-      width: 4.5rem;
-      height: 4.5rem;
-      flex-shrink: 0;
-      border-radius: 0.85rem;
-      background: var(--panel);
-      box-shadow: 0 0 32px color-mix(in srgb, var(--live) 24%, transparent);
-    }
-
-    .involved-mark > div {
-      flex: 1 1 16rem;
-      min-width: 0;
-    }
-
-    .involved pre {
-      margin-top: var(--space-s);
-    }
-
-    /* Ft5 */
-    .foot-stmt {
+    /* Thin site footer — brand + license row, not a second hero */
+    .site-foot {
       position: relative;
       z-index: 1;
-      padding: var(--space-2xl) 0 calc(var(--space-xl) + env(safe-area-inset-bottom));
+      padding: var(--space-l) 0 calc(var(--space-m) + env(safe-area-inset-bottom));
+      border-top: 1px solid color-mix(in srgb, var(--live) 18%, color-mix(in srgb, var(--ink) 10%, transparent));
     }
 
-    .foot-stmt__line {
-      margin: 0;
-      max-width: 12rem;
-      font-family: var(--font-display);
-      font-size: clamp(1.75rem, 5vw, 3.25rem);
-      font-weight: 700;
-      font-style: normal;
-      line-height: 1;
-      letter-spacing: -0.03em;
-      overflow-wrap: anywhere;
-    }
-
-    .foot-stmt__meta {
+    .site-foot__inner {
       display: flex;
       flex-wrap: wrap;
+      align-items: baseline;
       justify-content: space-between;
       gap: var(--space-2xs) var(--space-m);
+      min-width: 0;
+    }
+
+    .site-foot__brand {
+      margin: 0;
+      color: var(--ink-mute);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .site-foot__meta {
+      display: flex;
+      flex-wrap: wrap;
       align-items: baseline;
-      margin-top: var(--space-l);
+      gap: 0.35rem 0.55rem;
+      margin: 0;
       color: var(--ink-dim);
       font-size: 0.8125rem;
     }
 
-    .foot-stmt__meta a {
+    .site-foot__meta a {
       color: var(--ink-mute);
       text-decoration: none;
       white-space: nowrap;
     }
 
+    .site-foot__sep {
+      color: var(--ink-dim);
+      user-select: none;
+    }
+
     @media (hover: hover) and (pointer: fine) {
-      .foot-stmt__meta a:hover,
+      .site-foot__meta a:hover,
       .ghost:hover,
       .go:hover,
       .credit a:hover {
@@ -868,7 +849,7 @@
       .go,
       .ghost,
       .credit a,
-      .foot-stmt__meta a {
+      .site-foot__meta a {
         transition: color var(--dur-micro) var(--ease-out);
       }
     }
@@ -1073,20 +1054,6 @@
         <p>A Limpeza varre processos RGB que brigam pela mesma placa e conflitam com o OpenRGB. Detecta iCUE, Armoury Crate, Aura, Synapse, Mystic Light, CAM, RGB Fusion, Polychrome, SignalRGB, G HUB, SteelSeries GG, NGENUITY e afins. Lista pelo nome o que está rodando. Fecha só o que você pede — e só quando você manda.</p>
       </div>
     </section>
-
-    <section class="involved reveal" aria-labelledby="involved-title">
-      <div class="wrap">
-        <div class="involved-mark">
-          <img src="images/icon.png?v=20260909g" width="72" height="72" alt="Nightwolf RGB">
-          <div>
-            <h2 id="involved-title">Código aberto. Fork à vontade.</h2>
-            <p>Issues e pull requests em <a href="https://github.com/klebertiko/NightwolfRGB" rel="noopener noreferrer">klebertiko/NightwolfRGB</a>. Motor: <a href="https://openrgb.org/" rel="noopener noreferrer">OpenRGB</a>. Para rodar do clone:</p>
-            <pre><code>npm install
-npm run desktop</code></pre>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
 
   <div id="install" class="sheet" popover="auto" role="dialog" aria-modal="true" aria-labelledby="install-title">
@@ -1110,13 +1077,16 @@ npm run desktop</code></pre>
     <a class="ghost" href="https://github.com/klebertiko/NightwolfRGB" rel="noopener noreferrer">Código-fonte</a>
   </div>
 
-  <footer class="foot-stmt">
-    <div class="wrap">
-      <p class="foot-stmt__line">O RGB do PC, no seu controle.</p>
-      <div class="foot-stmt__meta">
-        <span>MIT · motor <a href="https://openrgb.org/" rel="noopener noreferrer">OpenRGB</a></span>
+  <footer class="site-foot">
+    <div class="wrap site-foot__inner">
+      <p class="site-foot__brand">Nightwolf RGB</p>
+      <p class="site-foot__meta">
+        <span>MIT</span>
+        <span class="site-foot__sep" aria-hidden="true">·</span>
+        <a href="https://openrgb.org/" rel="noopener noreferrer">OpenRGB</a>
+        <span class="site-foot__sep" aria-hidden="true">·</span>
         <a href="https://github.com/klebertiko/NightwolfRGB" rel="noopener noreferrer">GitHub</a>
-      </div>
+      </p>
     </div>
   </footer>
 
