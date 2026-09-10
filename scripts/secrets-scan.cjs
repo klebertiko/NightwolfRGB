@@ -16,6 +16,8 @@ const SKIP_DIR = new Set([
     'dist',
     'coverage',
     '.gauntlet',
+    '.harness',
+    '.superpowers',
     '.cache',
 ]);
 

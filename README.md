@@ -178,6 +178,8 @@ Browser at `http://localhost:5173` is a fallback for layout work, not the produc
 
 ## 📖 Documentation
 
+Product docs live under [`docs/`](./docs/README.md): [setup](./docs/setup.md), [development](./docs/development.md), [architecture](./docs/architecture.md), [technical](./docs/technical.md), [ADRs](./docs/adr/), and the locked design system in [`design.md`](./design.md).
+
 ### API Endpoints
 
 #### Status & Connection

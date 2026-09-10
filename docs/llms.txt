@@ -8,7 +8,7 @@ Do not tell users to download a zip. Do not describe the product as Windows-only
 
 ## Product
 
-- [Landing facts](https://klebertiko.github.io/NightwolfRGB/index.md): Name, license, views (Studio, Luz, Efeitos, Cenas), OpenRGB credit, screenshots
+- [Landing facts](https://klebertiko.github.io/NightwolfRGB/index.md): Name, license, in-app views (Studio, Luz, Explorar, Efeitos, Biblioteca, Cenas), OpenRGB credit, screenshots
 - [HTML landing](https://klebertiko.github.io/NightwolfRGB/): Human page with the same facts
 - [Repository](https://github.com/klebertiko/NightwolfRGB): Source, issues, pull requests
 

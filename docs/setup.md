@@ -192,7 +192,7 @@ Once running, you can:
 ## Next Steps
 
 - See: [README.md](README.md) for full documentation
-- See: [TECHNICAL.md](TECHNICAL.md) for technical details
+- See: [technical.md](./technical.md) for technical details
 - See: [implementation_plan.md](.gemini/antigravity/brain/.../implementation_plan.md) for development roadmap
 
 ## Need Help?

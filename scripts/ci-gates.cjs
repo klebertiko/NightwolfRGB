@@ -45,12 +45,16 @@ const tests = [
     'scripts/lighting-engine.test.cjs',
     'scripts/canvas-layout.test.cjs',
     'scripts/type-roles.test.cjs',
+    'scripts/effect-workbench-state.test.cjs',
     'scripts/chrome-ia.test.cjs',
     'scripts/openrgb-parity.test.cjs',
     'scripts/windows-app-identity.test.cjs',
     'scripts/desktop-shutdown.test.cjs',
+    'scripts/desktop-restore.test.cjs',
+    'scripts/desktop-boot.test.cjs',
     'scripts/pack-release.test.cjs',
     'scripts/secrets-scan.test.cjs',
+    'scripts/landing-pages.test.cjs',
 ];
 run('test:unit', node, ['--test', ...tests]);
 run('test:update-safe', node, [
