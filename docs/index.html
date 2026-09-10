@@ -7,16 +7,62 @@
   <title>Nightwolf RGB — o RGB do PC, no seu controle</title>
   <meta name="description" content="O motor é o OpenRGB. Nightwolf é 100% compatível e traz o OpenRGB no bundle. Pinte o RGB do PC. Sem conta. irm | iex.">
   <meta name="author" content="klebertiko">
+  <meta name="theme-color" content="#0c0b0a">
+  <meta name="robots" content="index, follow">
+  <meta name="keywords" content="OpenRGB, RGB, lighting, LED, Nightwolf RGB">
   <link rel="canonical" href="https://klebertiko.github.io/NightwolfRGB/">
+  <link rel="describedby" href="https://klebertiko.github.io/NightwolfRGB/llms.txt">
+  <link rel="alternate" type="text/markdown" href="https://klebertiko.github.io/NightwolfRGB/index.md" title="Markdown">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Nightwolf RGB">
   <meta property="og:url" content="https://klebertiko.github.io/NightwolfRGB/">
   <meta property="og:title" content="Nightwolf RGB — o RGB do PC, no seu controle">
   <meta property="og:description" content="O motor é o OpenRGB. Nightwolf é 100% compatível e sobe com o OpenRGB no bundle. irm | iex.">
   <meta property="og:image" content="https://klebertiko.github.io/NightwolfRGB/images/studio.png">
+  <meta property="og:image:alt" content="Studio do Nightwolf RGB: palco ao vivo do hardware conectado.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Nightwolf RGB — o RGB do PC, no seu controle">
   <meta name="twitter:description" content="OpenRGB no bundle. Pinte zona e LED, grave perfil .orp. irm | iex.">
   <meta name="twitter:image" content="https://klebertiko.github.io/NightwolfRGB/images/studio.png">
+  <meta name="twitter:image:alt" content="Studio do Nightwolf RGB: palco ao vivo do hardware conectado.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "Nightwolf RGB",
+        "alternateName": "NightwolfRGB",
+        "description": "Lighting console for PC RGB. The engine is OpenRGB. Nightwolf is 100% compatible and ships the OpenRGB SDK in the bundle.",
+        "url": "https://klebertiko.github.io/NightwolfRGB/",
+        "image": "https://klebertiko.github.io/NightwolfRGB/images/studio.png",
+        "screenshot": "https://klebertiko.github.io/NightwolfRGB/images/studio.png",
+        "applicationCategory": "UtilitiesApplication",
+        "applicationSubCategory": "Lighting control",
+        "license": "https://opensource.org/license/mit",
+        "codeRepository": "https://github.com/klebertiko/NightwolfRGB",
+        "installUrl": "https://github.com/klebertiko/NightwolfRGB/releases/latest/download/install.ps1",
+        "downloadUrl": "https://github.com/klebertiko/NightwolfRGB/releases/latest/download/install.sh",
+        "softwareHelp": "https://klebertiko.github.io/NightwolfRGB/",
+        "isBasedOn": {
+          "@type": "SoftwareApplication",
+          "name": "OpenRGB",
+          "url": "https://openrgb.org/"
+        },
+        "author": { "@id": "https://github.com/klebertiko#klebertiko" },
+        "publisher": { "@id": "https://github.com/klebertiko#klebertiko" }
+      },
+      {
+        "@type": ["Person", "Organization"],
+        "@id": "https://github.com/klebertiko#klebertiko",
+        "name": "klebertiko",
+        "url": "https://github.com/klebertiko",
+        "sameAs": ["https://github.com/klebertiko"]
+      }
+    ]
+  }
+  </script>
   <link rel="icon" type="image/svg+xml" href="images/mark.svg?v=20260909g">
   <link rel="alternate icon" type="image/png" href="images/icon.png?v=20260909g">
   <link rel="apple-touch-icon" href="images/icon.png?v=20260909g">
@@ -25,7 +71,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700&display=swap" rel="stylesheet">
   <style>
     /* Hallmark · genre: atmospheric · macrostructure: Photographic · tone: cinematic · anchor: --live */
-    /* Hallmark · nav: N5 · footer: Ft5 · design-system: design.md */
+    /* Hallmark · nav: console mast · footer: Ft5 · design-system: design.md */
     /* Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V5 */
     :root {
       --paper: #0c0b0a;
@@ -50,7 +96,7 @@
       --measure: 58ch;
       --gutter: clamp(1.5rem, 5.5vw, 3rem);
       --page: 68rem;
-      --nav-offset: 5.25rem;
+      --nav-offset: calc(3.5rem + env(safe-area-inset-top, 0px));
       --radius: 1rem;
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
       --dur-micro: 120ms;
@@ -70,6 +116,8 @@
       scroll-behavior: smooth;
       overflow-x: clip;
       width: 100%;
+      color-scheme: dark;
+      scroll-padding-top: var(--nav-offset);
     }
 
     body {
@@ -123,8 +171,9 @@
     .spot {
       position: fixed;
       inset: 0;
-      z-index: 0;
+      z-index: 5;
       pointer-events: none;
+      mix-blend-mode: screen;
       background: radial-gradient(
         36rem circle at var(--spot-x) var(--spot-y),
         color-mix(in srgb, var(--live) 26%, transparent),
@@ -158,31 +207,30 @@
       min-width: 0;
     }
 
-    /* N5 — floating pill, hugs content, never wider than the viewport */
-    .nav-pill {
+    /* Console — full-bleed desk. Square cells. Live spine. Not a pill. */
+    .mast {
       position: fixed;
-      top: max(0.75rem, env(safe-area-inset-top));
-      left: 50%;
-      z-index: 30;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 40;
       display: flex;
       align-items: center;
       gap: var(--space-2xs);
-      width: max-content;
-      max-width: calc(100vw - 1.5rem);
-      padding: 0.3rem 0.3rem 0.3rem 0.7rem;
-      background: color-mix(in srgb, var(--paper) 78%, transparent);
-      backdrop-filter: blur(14px) saturate(120%);
-      border-radius: 999px;
-      box-shadow:
-        0 0 0 1px color-mix(in srgb, var(--live) 28%, transparent),
-        0 12px 40px color-mix(in srgb, var(--live) 22%, transparent);
-      transform: translateX(-50%);
+      min-height: 3.25rem;
+      padding:
+        max(0.35rem, env(safe-area-inset-top))
+        var(--gutter)
+        0.35rem;
+      background: var(--panel);
+      box-shadow: 0 1px 0 var(--live);
     }
 
     .wordmark {
       display: inline-flex;
       align-items: center;
       gap: var(--space-2xs);
+      margin-right: auto;
       min-width: 0;
       color: var(--ink);
       text-decoration: none;
@@ -197,11 +245,9 @@
       width: 1.25rem;
       height: 1.25rem;
       flex-shrink: 0;
-      border-radius: var(--space-3xs);
     }
 
     .wordmark-rgb {
-      display: none;
       color: var(--live);
       font-family: var(--font-sans);
       font-weight: 500;
@@ -209,65 +255,48 @@
       letter-spacing: 0;
     }
 
-    .nav-pill__links {
+    .console {
       display: none;
-      gap: var(--space-m);
+    }
+
+    .console ul {
+      display: flex;
+      gap: 0.15rem;
       margin: 0;
       padding: 0;
       list-style: none;
     }
 
-    .nav-pill__links a,
-    .nav-more a {
-      color: var(--ink-mute);
+    .mast-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-height: 2.25rem;
+      padding: 0 0.7rem 0 0.65rem;
+      border-radius: 0;
+      color: var(--ink-dim);
       text-decoration: none;
       font-size: 0.875rem;
+      font-weight: 500;
       white-space: nowrap;
+      background: transparent;
+      box-shadow: inset 2px 0 0 transparent;
     }
 
-    .nav-more {
-      position: relative;
+    .mast-link svg {
+      width: 1rem;
+      height: 1rem;
       flex-shrink: 0;
     }
 
-    .nav-more summary {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 2.25rem;
-      min-width: 2.25rem;
-      padding: 0 var(--space-2xs);
-      list-style: none;
-      cursor: pointer;
-      color: var(--ink-mute);
-      font-size: 0.875rem;
+    .mast-link[aria-current="page"] {
+      color: var(--ink);
+      background: var(--inset);
+      box-shadow: inset 2px 0 0 var(--live);
     }
 
-    .nav-more summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .nav-more ul {
-      position: absolute;
-      top: calc(100% + 0.5rem);
-      right: 0;
-      z-index: 31;
-      min-width: 10rem;
-      margin: 0;
-      padding: var(--space-2xs) 0;
-      list-style: none;
-      background: var(--panel);
-      border-radius: 0.75rem;
-      box-shadow:
-        0 0 0 1px color-mix(in srgb, var(--live) 22%, transparent),
-        0 16px 40px rgb(0 0 0 / 0.45);
-    }
-
-    .nav-more a {
-      display: flex;
-      align-items: center;
-      min-height: 2.75rem;
-      padding: 0 var(--space-s);
+    .mast-link[aria-current="page"] svg {
+      color: var(--live);
     }
 
     .cta {
@@ -276,50 +305,138 @@
       justify-content: center;
       flex-shrink: 0;
       min-height: 2.25rem;
-      padding: 0 var(--space-s);
-      border-radius: 999px;
+      padding: 0 0.85rem;
+      border: 0;
+      border-radius: 0;
       background: var(--ink);
       color: var(--paper);
       text-decoration: none;
+      font-family: inherit;
       font-size: 0.875rem;
       font-weight: 500;
       white-space: nowrap;
+      cursor: pointer;
     }
 
     .cta:active {
       background: var(--ink-mute);
     }
 
+    .mast__toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 2.25rem;
+      height: 2.25rem;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: var(--inset);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .mast__toggle svg {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    .rail {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: min(17.5rem, calc(100vw - 1.25rem));
+      height: 100dvh;
+      margin: 0;
+      padding: var(--space-s) var(--space-2xs);
+      border: 0;
+      background: var(--panel);
+      color: var(--ink);
+      box-shadow: 1px 0 0 var(--live);
+    }
+
+    .rail:popover-open {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      inset: 0 auto 0 0;
+      width: min(17.5rem, calc(100vw - 1.25rem));
+      height: 100dvh;
+      margin: 0;
+      border-radius: 0;
+    }
+
+    .rail::backdrop {
+      background: rgb(12 11 10 / 0.72);
+    }
+
+    .rail__brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2xs);
+      margin: 0 0 var(--space-s);
+      padding: 0.35rem 0.6rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      letter-spacing: -0.03em;
+    }
+
+    .rail__brand img {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    .rail .mast-link {
+      display: flex;
+      width: 100%;
+      min-height: 2.75rem;
+    }
+
+    .rail .cta {
+      margin-top: auto;
+      width: 100%;
+    }
+
     @media (min-width: 60rem) {
-      .nav-pill {
-        gap: var(--space-s);
-        padding: 0.35rem 0.35rem 0.35rem 0.85rem;
+      .console {
+        display: block;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
       }
 
-      .wordmark-rgb {
-        display: inline;
-      }
-
-      .nav-pill__links {
-        display: flex;
-      }
-
-      .nav-more {
+      .mast__toggle {
         display: none;
       }
     }
 
-    @media (hover: hover) and (pointer: fine) {
-      .nav-pill__links a,
-      .nav-more a,
-      .nav-more summary {
-        transition: color var(--dur-micro) var(--ease-out);
+    @media (max-width: 59.99rem) {
+      .mast {
+        gap: 0.35rem;
+        padding-inline: 0.75rem;
       }
 
-      .nav-pill__links a:hover,
-      .nav-more a:hover,
-      .nav-more summary:hover {
+      .wordmark {
+        font-size: 0.875rem;
+      }
+
+      .mast > .cta {
+        padding-inline: 0.65rem;
+      }
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .mast-link {
+        transition:
+          color var(--dur-micro) var(--ease-out),
+          background-color var(--dur-micro) var(--ease-out),
+          box-shadow var(--dur-micro) var(--ease-out);
+      }
+
+      .mast-link:hover {
         color: var(--ink);
+        background: var(--inset);
       }
 
       .cta {
@@ -330,6 +447,11 @@
         background: var(--live);
         color: var(--paper);
       }
+
+      .mast__toggle:hover,
+      .sheet__close:hover {
+        color: var(--live);
+      }
     }
 
     main {
@@ -339,30 +461,26 @@
       min-width: 0;
     }
 
-    /* Hero — product on a stage, never edge-flush */
+    /* Hero — type + CTA beside the window, never stacked on the button */
     .hero {
-      padding-top: var(--nav-offset);
+      padding-top: calc(var(--nav-offset) + var(--space-s));
       padding-bottom: var(--space-xl);
     }
 
-    .hero__shot {
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      object-fit: cover;
-      object-position: center top;
-      border-radius: var(--radius);
-      background: var(--inset);
-      box-shadow:
-        0 0 0 1px color-mix(in srgb, var(--live) 22%, transparent),
-        0 0 72px color-mix(in srgb, var(--live) 28%, transparent),
-        0 24px 56px rgb(0 0 0 / 0.5);
+    .wrap--hero {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xl);
+      min-width: 0;
     }
 
     .hero__copy {
-      display: grid;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
       gap: var(--space-s);
-      margin-top: var(--space-l);
       min-width: 0;
+      max-width: 100%;
     }
 
     .hero h1 {
@@ -379,19 +497,17 @@
 
     .hero__copy p {
       margin: 0;
-      max-width: var(--measure);
+      max-width: min(var(--measure), 100%);
       color: var(--ink-mute);
+      overflow-wrap: anywhere;
     }
 
-    .hero .go {
-      justify-self: start;
+    .hero__copy .cta {
       margin-top: var(--space-2xs);
     }
 
-    .hero__note {
-      margin: var(--space-s) 0 0;
-      font-size: 0.8125rem;
-      color: var(--ink-dim);
+    .hero .stage {
+      order: 1;
     }
 
     @media (min-width: 60rem) {
@@ -399,29 +515,15 @@
         padding-bottom: var(--space-2xl);
       }
 
-      .hero__copy {
-        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-        align-items: end;
-        gap: var(--space-l);
+      .wrap--hero {
+        display: grid;
+        grid-template-columns: minmax(16rem, 0.72fr) minmax(0, 1.28fr);
+        align-items: center;
+        gap: var(--space-xl);
       }
 
-      .hero h1 {
-        grid-column: 1;
-        grid-row: 1;
-      }
-
-      .hero__lede {
-        grid-column: 2;
-        grid-row: 1;
-      }
-
-      .hero .go {
-        grid-column: 2;
-        grid-row: 2;
-      }
-
-      .hero__note {
-        grid-column: 1 / -1;
+      .hero .stage {
+        order: 0;
       }
     }
 
@@ -437,13 +539,11 @@
 
     /* Text bands */
     .band,
-    .download,
     .involved {
       padding-block: var(--space-2xl);
     }
 
-    .band--panel,
-    .download {
+    .band--panel {
       background: var(--panel);
     }
 
@@ -465,7 +565,6 @@
     }
 
     .band h2,
-    .download h2,
     .involved h2 {
       margin: 0;
       max-width: 22rem;
@@ -479,7 +578,6 @@
     }
 
     .band p,
-    .download > p,
     .involved p {
       margin: var(--space-s) 0 0;
       max-width: var(--measure);
@@ -500,62 +598,82 @@
 
     @media (min-width: 60rem) {
       .band,
-      .download,
       .involved {
         padding-block: var(--space-3xl);
       }
     }
 
-    /* Framed captures — inside the wrap, never flush to the browser */
-    .shot {
-      padding-block: var(--space-s);
+    /* Product well — full 16:9 window, never cropped */
+    .wrap--stage {
+      width: min(100%, 86rem);
     }
 
-    .shot figure {
+    .stage {
       margin: 0;
       min-width: 0;
+      max-width: 100%;
     }
 
-    .shot img {
+    .stage__well {
+      min-width: 0;
+      max-width: 100%;
+      padding: clamp(0.65rem, 1.6vw, 1.5rem);
+      background:
+        radial-gradient(
+          70% 80% at 50% 42%,
+          color-mix(in srgb, var(--live) 22%, transparent),
+          transparent 72%
+        ),
+        var(--inset);
+      border-radius: calc(var(--radius) + 0.35rem);
+      box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--live) 20%, transparent),
+        0 0 80px color-mix(in srgb, var(--live) 18%, transparent),
+        0 28px 64px rgb(0 0 0 / 0.55);
+    }
+
+    .stage__img {
       width: 100%;
-      aspect-ratio: 16 / 10;
-      object-fit: cover;
-      border-radius: var(--radius);
-      background: var(--inset);
+      max-width: 100%;
+      min-width: 0;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: contain;
+      object-position: center;
+      border-radius: 0.45rem;
+      background: #080706;
+      display: block;
     }
 
-    .shot--luz img {
-      object-position: 55% 40%;
+    .shot {
+      padding-block: var(--space-m);
     }
 
-    .shot--efeitos img {
-      object-position: 48% 45%;
-    }
-
-    .shot figcaption {
+    .shot figcaption,
+    .stage figcaption {
       margin: var(--space-s) 0 0;
       font-size: 0.8125rem;
       color: var(--ink-mute);
     }
 
     @supports (animation-timeline: view()) {
-      .shot img {
-        animation: ken linear both;
+      .stage__well {
+        animation: rise linear both;
         animation-timeline: view();
-        animation-range: entry 0% cover 40%;
+        animation-range: entry 0% cover 38%;
       }
     }
 
-    @keyframes ken {
-      from { transform: scale(1.06); }
-      to { transform: scale(1); }
+    @keyframes rise {
+      from { transform: translateY(1.25rem); opacity: 0.72; }
+      to { transform: none; opacity: 1; }
     }
 
     .install-steps {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
       gap: var(--space-l);
-      margin-top: var(--space-xl);
+      margin-top: var(--space-m);
     }
 
     .install-steps h3 {
@@ -570,20 +688,13 @@
       max-width: 100%;
       padding: var(--space-s);
       overflow-x: auto;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
       background: var(--inset);
       font-family: var(--font-mono);
       font-size: 0.8125rem;
       line-height: 1.55;
       color: var(--ink);
-      border-radius: 0.5rem;
-      box-shadow: 0 0 40px color-mix(in srgb, var(--live) 12%, transparent);
-    }
-
-    .download-cta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-s) var(--space-m);
-      margin-top: var(--space-xl);
     }
 
     .ghost {
@@ -592,10 +703,76 @@
       white-space: nowrap;
     }
 
-    @media (min-width: 60rem) {
-      .install-steps {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+    .sheet {
+      width: min(36rem, calc(100vw - 1.5rem));
+      max-height: min(90dvh, 40rem);
+      margin: auto;
+      padding: var(--space-l);
+      overflow: auto;
+      border: 0;
+      border-radius: 0;
+      background: var(--panel);
+      color: var(--ink);
+      box-shadow: 0 1px 0 var(--live), 0 28px 64px rgb(0 0 0 / 0.55);
+    }
+
+    .sheet::backdrop {
+      background: rgb(12 11 10 / 0.72);
+    }
+
+    .sheet[open] {
+      display: block;
+      position: fixed;
+      inset: 0;
+      height: fit-content;
+      margin: auto;
+    }
+
+    .sheet h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-style: normal;
+      letter-spacing: -0.03em;
+    }
+
+    .sheet p {
+      margin: var(--space-s) 0 0;
+      color: var(--ink-mute);
+    }
+
+    .sheet .ghost {
+      display: inline-flex;
+      margin-top: var(--space-m);
+    }
+
+    .sheet__top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-s);
+    }
+
+    .sheet__close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 2.25rem;
+      height: 2.25rem;
+      margin: -0.35rem -0.35rem 0 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: var(--inset);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .sheet__close svg {
+      width: 1rem;
+      height: 1rem;
     }
 
     .involved-mark {
@@ -676,14 +853,17 @@
 
     @media (pointer: coarse) {
       .cta,
-      .nav-pill__links a,
-      .nav-more summary,
+      .mast-link,
+      .mast__toggle,
+      .sheet__close,
       .go {
         min-height: 2.75rem;
       }
 
-      .nav-more summary {
-        min-width: 2.75rem;
+      .mast__toggle,
+      .sheet__close {
+        width: 2.75rem;
+        height: 2.75rem;
       }
 
       .spot {
@@ -708,7 +888,7 @@
         transform: none;
       }
 
-      .shot img {
+      .stage__well {
         animation: none;
       }
     }
@@ -719,39 +899,84 @@
   <div class="spot" aria-hidden="true"></div>
   <div class="shutter" id="shutter" aria-hidden="true"></div>
 
-  <nav class="nav-pill" aria-label="Principal">
+  <header class="mast">
     <a class="wordmark" href="#studio">
       <img src="images/mark.svg?v=20260909g" width="20" height="20" alt="">
       <span>Nightwolf</span>
       <span class="wordmark-rgb">RGB</span>
     </a>
-    <ul class="nav-pill__links">
-      <li><a href="#luz">Luz</a></li>
-      <li><a href="#efeitos">Efeitos</a></li>
-      <li><a href="#cenas">Cenas</a></li>
-    </ul>
-    <details class="nav-more">
-      <summary aria-label="Luz, Efeitos, Cenas">Menu</summary>
+    <nav class="console" aria-label="Principal">
       <ul>
-        <li><a href="#luz">Luz</a></li>
-        <li><a href="#efeitos">Efeitos</a></li>
-        <li><a href="#cenas">Cenas</a></li>
+        <li>
+          <a class="mast-link" href="#studio" aria-current="page">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Studio
+          </a>
+        </li>
+        <li>
+          <a class="mast-link" href="#luz">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2h8l4 10H4L8 2Z"/><path d="M12 12v6"/><path d="M8 22v-2c0-1.1.9-2 2-2h4a2 2 0 0 1 2 2v2"/><path d="M7 12v2"/><path d="M17 12v2"/></svg>
+            Luz
+          </a>
+        </li>
+        <li>
+          <a class="mast-link" href="#efeitos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>
+            Efeitos
+          </a>
+        </li>
+        <li>
+          <a class="mast-link" href="#cenas">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            Cenas
+          </a>
+        </li>
       </ul>
-    </details>
-    <a class="cta" href="#baixar">Baixar</a>
+    </nav>
+    <button class="mast__toggle" type="button" popovertarget="rail" aria-label="Abrir console" aria-controls="rail">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 3v18"/><path d="M12 3v18"/><path d="M19 3v18"/><circle cx="5" cy="9" r="2" fill="currentColor" stroke="none"/><circle cx="12" cy="15" r="2" fill="currentColor" stroke="none"/><circle cx="19" cy="11" r="2" fill="currentColor" stroke="none"/></svg>
+    </button>
+    <button class="cta" type="button" popovertarget="install">Baixar</button>
+  </header>
+
+  <nav id="rail" class="rail" popover="auto" aria-label="Principal">
+    <div class="rail__brand">
+      <img src="images/mark.svg?v=20260909g" width="20" height="20" alt="">
+      Nightwolf <span class="wordmark-rgb">RGB</span>
+    </div>
+    <a class="mast-link" href="#studio" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Studio
+    </a>
+    <a class="mast-link" href="#luz">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2h8l4 10H4L8 2Z"/><path d="M12 12v6"/><path d="M8 22v-2c0-1.1.9-2 2-2h4a2 2 0 0 1 2 2v2"/><path d="M7 12v2"/><path d="M17 12v2"/></svg>
+      Luz
+    </a>
+    <a class="mast-link" href="#efeitos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>
+      Efeitos
+    </a>
+    <a class="mast-link" href="#cenas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      Cenas
+    </a>
+    <button class="cta" type="button" popovertarget="install">Baixar</button>
   </nav>
 
   <main id="conteudo">
     <section class="hero" id="studio" aria-labelledby="hero-title">
-      <div class="wrap">
-        <img class="hero__shot" src="images/studio.png" width="1440" height="900" fetchpriority="high" decoding="async"
-             alt="Studio do Nightwolf RGB: mural ao vivo da placa B550M GAMING X WIFI6 com wash azul no gabinete.">
+      <div class="wrap wrap--hero">
         <div class="hero__copy">
           <h1 id="hero-title">O RGB do PC, no seu controle.</h1>
           <p class="hero__lede">Livre-se do bloatware. Sem conta. O OpenRGB vem no bundle — 100% compatível. Você pinta o hardware. Pronto.</p>
-          <a class="go" href="#baixar">Baixar</a>
+          <button class="cta" type="button" popovertarget="install">Baixar</button>
         </div>
-        <p class="hero__note">B550M GAMING X WIFI6. Wash azul. 9 set 2026.</p>
+        <figure class="stage">
+          <div class="stage__well">
+            <img class="stage__img" src="images/studio.png?v=20260910a" width="1920" height="1080" fetchpriority="high" decoding="async"
+                 alt="Studio do Nightwolf RGB: palco ao vivo do hardware conectado.">
+          </div>
+        </figure>
       </div>
     </section>
 
@@ -763,11 +988,13 @@
       </div>
     </section>
 
-    <section class="shot shot--luz" id="luz" aria-labelledby="luz-cap">
-      <div class="wrap">
-        <figure>
-          <img src="images/luz.png" width="1440" height="900" loading="lazy" decoding="async"
-               alt="Vista Luz do Nightwolf RGB, placa B550M selecionada, modos hardware e zonas.">
+    <section class="shot" id="luz" aria-labelledby="luz-cap">
+      <div class="wrap wrap--stage">
+        <figure class="stage">
+          <div class="stage__well">
+            <img class="stage__img" src="images/luz.png?v=20260910a" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Vista Luz do Nightwolf RGB: device, zona, modos hardware e o campo de cor.">
+          </div>
           <figcaption id="luz-cap">Cada LED. Device, zona, header.</figcaption>
         </figure>
       </div>
@@ -780,11 +1007,13 @@
       </div>
     </section>
 
-    <section class="shot shot--efeitos" id="efeitos" aria-labelledby="efeitos-cap">
-      <div class="wrap">
-        <figure>
-          <img src="images/efeitos.png" width="1440" height="900" loading="lazy" decoding="async"
-               alt="Tela Efeitos: Arco-íris live, palco sólido na cor ao vivo, Direct sem áudio, velocidade 50.">
+    <section class="shot" id="efeitos" aria-labelledby="efeitos-cap">
+      <div class="wrap wrap--stage">
+        <figure class="stage">
+          <div class="stage__well">
+            <img class="stage__img" src="images/efeitos.png?v=20260910a" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Tela Efeitos do Nightwolf RGB: Arco-íris ao vivo no hardware, Direct, sem microfone.">
+          </div>
           <figcaption id="efeitos-cap">Arco-íris no hardware. Direct, sem microfone.</figcaption>
         </figure>
       </div>
@@ -798,10 +1027,12 @@
     </section>
 
     <section class="shot" id="cenas" aria-labelledby="cenas-cap">
-      <div class="wrap">
-        <figure>
-          <img src="images/cenas.png" width="1440" height="900" loading="lazy" decoding="async"
-               alt="Cenas Nightwolf vazia (Nova cena) após wash azul; perfil nativo OpenRGB Purple visível.">
+      <div class="wrap wrap--stage">
+        <figure class="stage">
+          <div class="stage__well">
+            <img class="stage__img" src="images/cenas.png?v=20260910a" width="1920" height="1080" loading="lazy" decoding="async"
+                 alt="Cenas do Nightwolf RGB: cena do app de um lado, perfil nativo OpenRGB do outro.">
+          </div>
           <figcaption id="cenas-cap">Cena Nightwolf num lado. Perfil .orp no outro.</figcaption>
         </figure>
       </div>
@@ -816,29 +1047,11 @@
 
     <section class="band band--inset reveal" aria-labelledby="clean-title">
       <div class="wrap">
-        <h2 id="clean-title">Mate o iCUE. O SDK precisa do hardware livre.</h2>
+        <h2 id="clean-title">Mate o que conflita. O SDK precisa do hardware livre.</h2>
         <p>A Limpeza varre processos RGB que brigam pela mesma placa e conflitam com o OpenRGB. Detecta iCUE, Armoury Crate, Aura, Synapse, Mystic Light, CAM, RGB Fusion, Polychrome, SignalRGB, G HUB, SteelSeries GG, NGENUITY e afins. Lista pelo nome o que está rodando. Fecha só o que você pede — e só quando você manda.</p>
       </div>
     </section>
 
-    <section class="download reveal" id="baixar" aria-labelledby="baixar-title">
-      <div class="wrap">
-        <h2 id="baixar-title">Baixa. Pinta. Acabou.</h2>
-        <p>Uma linha. PowerShell ou Git Bash. O script instala a build fechada. Depois, <code>nightwolfrgb update</code> ou Atualizar no app. Os dois também checam o OpenRGB.</p>
-        <div class="install-steps">
-          <div>
-            <h3>PowerShell</h3>
-            <pre><code>irm https://github.com/klebertiko/NightwolfRGB/releases/latest/download/install.ps1 | iex</code></pre>
-          </div>
-          <div>
-            <h3>Git Bash</h3>
-            <pre><code>curl -fsSL https://github.com/klebertiko/NightwolfRGB/releases/latest/download/install.sh | bash</code></pre>
-          </div>
-        </div>
-        <div class="download-cta">
-          <a class="ghost" href="https://github.com/klebertiko/NightwolfRGB" rel="noopener noreferrer">Código-fonte</a>
-        </div>
-      </div>
     </section>
 
     <section class="involved reveal" aria-labelledby="involved-title">
@@ -856,6 +1069,27 @@ npm run desktop</code></pre>
     </section>
   </main>
 
+  <div id="install" class="sheet" popover="auto" role="dialog" aria-modal="true" aria-labelledby="install-title">
+    <div class="sheet__top">
+      <h2 id="install-title">Instalar</h2>
+      <button class="sheet__close" type="button" popovertarget="install" popovertargetaction="hide" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <p>Uma linha. PowerShell ou Git Bash. O script instala a build fechada. Depois, <code>nightwolfrgb update</code> ou Atualizar no app. Os dois também checam o OpenRGB.</p>
+    <div class="install-steps">
+      <div>
+        <h3>PowerShell</h3>
+        <pre><code>irm https://github.com/klebertiko/NightwolfRGB/releases/latest/download/install.ps1 | iex</code></pre>
+      </div>
+      <div>
+        <h3>Git Bash</h3>
+        <pre><code>curl -fsSL https://github.com/klebertiko/NightwolfRGB/releases/latest/download/install.sh | bash</code></pre>
+      </div>
+    </div>
+    <a class="ghost" href="https://github.com/klebertiko/NightwolfRGB" rel="noopener noreferrer">Código-fonte</a>
+  </div>
+
   <footer class="foot-stmt">
     <div class="wrap">
       <p class="foot-stmt__line">O RGB do PC, no seu controle.</p>
@@ -872,11 +1106,15 @@ npm run desktop</code></pre>
       var WASH = ['#c9897a', '#d45c5c', '#c4a35a', '#6f9e6a', '#4a7ea8', '#f3ead8'];
       var root = document.documentElement;
       var shutter = document.getElementById('shutter');
+      var rail = document.getElementById('rail');
+      var install = document.getElementById('install');
       var motion = window.matchMedia('(prefers-reduced-motion: reduce)');
       var fine = window.matchMedia('(pointer: fine)');
       var target = { r: 255, g: 77, b: 141, x: 0.5, y: 0.4 };
       var cur = { r: 255, g: 77, b: 141, x: 0.5, y: 0.4 };
       var ticking = false;
+      var PS = 'irm https://github.com/klebertiko/NightwolfRGB/releases/latest/download/install.ps1 | iex';
+      var SH = 'curl -fsSL https://github.com/klebertiko/NightwolfRGB/releases/latest/download/install.sh | bash';
 
       function hexToRgb(hex) {
         var n = parseInt(hex.slice(1), 16);
@@ -943,6 +1181,19 @@ npm run desktop</code></pre>
         shutter.classList.add('is-fire');
       }
 
+      function hideRail() {
+        if (rail && typeof rail.hidePopover === 'function') rail.hidePopover();
+      }
+
+      function openInstall() {
+        if (!install) return;
+        if (typeof install.showPopover === 'function') {
+          install.showPopover();
+          return;
+        }
+        install.setAttribute('open', '');
+      }
+
       function onNavClick(e) {
         var href = e.currentTarget.getAttribute('href') || '';
         if (href.charAt(0) !== '#') return;
@@ -950,8 +1201,7 @@ npm run desktop</code></pre>
         if (!el) return;
         e.preventDefault();
         fireShutter();
-        var more = e.currentTarget.closest('details');
-        if (more) more.open = false;
+        hideRail();
         var reduce = motion.matches;
         window.setTimeout(function () {
           el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
@@ -965,6 +1215,15 @@ npm run desktop</code></pre>
       document.querySelectorAll('a[href^="#"]').forEach(function (a) {
         if (a.classList.contains('skip')) return;
         a.addEventListener('click', onNavClick);
+      });
+
+      document.querySelectorAll('[popovertarget="install"]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          hideRail();
+          if (install && typeof install.showPopover !== 'function') {
+            openInstall();
+          }
+        });
       });
 
       if ('IntersectionObserver' in window) {
@@ -983,11 +1242,81 @@ npm run desktop</code></pre>
             io.observe(el);
           }
         });
+
+        var spy = new IntersectionObserver(function (entries) {
+          var visible = entries.filter(function (e) { return e.isIntersecting; });
+          if (!visible.length) return;
+          visible.sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; });
+          var id = '#' + visible[0].target.id;
+          document.querySelectorAll('.mast-link').forEach(function (a) {
+            if (a.getAttribute('href') === id) a.setAttribute('aria-current', 'page');
+            else a.removeAttribute('aria-current');
+          });
+        }, { rootMargin: '-30% 0px -55% 0px', threshold: [0, 0.25, 0.5] });
+        ['studio', 'luz', 'efeitos', 'cenas'].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) spy.observe(el);
+        });
       } else {
         document.querySelectorAll('.reveal').forEach(function (el) {
           el.classList.add('is-in');
         });
       }
+
+      function registerWebMcp() {
+        var ctx = document.modelContext || navigator.modelContext;
+        if (!ctx || typeof ctx.registerTool !== 'function') return;
+        var ac = new AbortController();
+        var opts = { signal: ac.signal };
+        var read = { readOnlyHint: true };
+        var empty = { type: 'object', properties: {} };
+        ctx.registerTool({
+          name: 'get_product',
+          description: 'Nightwolf RGB product facts: name, one-liner, MIT license, GitHub repo, OpenRGB engine.',
+          inputSchema: empty,
+          annotations: read,
+          execute: function () {
+            return JSON.stringify({
+              name: 'Nightwolf RGB',
+              oneLiner: 'Lighting console for PC RGB. The engine is OpenRGB.',
+              license: 'MIT',
+              repo: 'https://github.com/klebertiko/NightwolfRGB',
+              openrgb: 'https://openrgb.org/',
+              landing: 'https://klebertiko.github.io/NightwolfRGB/'
+            });
+          }
+        }, opts);
+        ctx.registerTool({
+          name: 'get_install',
+          description: 'Install commands for the closed Nightwolf RGB build. PowerShell and Git Bash one-liners. No zip.',
+          inputSchema: empty,
+          annotations: read,
+          execute: function () {
+            return JSON.stringify({
+              powershell: PS,
+              bash: SH,
+              after: 'nightwolfrgb update or Atualizar in-app; both also check OpenRGB',
+              source: 'https://github.com/klebertiko/NightwolfRGB'
+            });
+          }
+        }, opts);
+        ctx.registerTool({
+          name: 'get_views',
+          description: 'Landing view anchors: Studio, Luz, Efeitos, Cenas.',
+          inputSchema: empty,
+          annotations: read,
+          execute: function () {
+            return JSON.stringify({
+              studio: { href: '#studio', url: 'https://klebertiko.github.io/NightwolfRGB/#studio' },
+              luz: { href: '#luz', url: 'https://klebertiko.github.io/NightwolfRGB/#luz' },
+              efeitos: { href: '#efeitos', url: 'https://klebertiko.github.io/NightwolfRGB/#efeitos' },
+              cenas: { href: '#cenas', url: 'https://klebertiko.github.io/NightwolfRGB/#cenas' }
+            });
+          }
+        }, opts);
+      }
+
+      registerWebMcp();
     })();
   </script>
 </body>

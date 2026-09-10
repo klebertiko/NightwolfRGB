@@ -92,10 +92,11 @@ Desktop 1440×900. Spacing is dashboard-dense (8–24px), not marketing (48–96
 **Landing** (`docs/index.html`, GitHub Pages): same three families and the locked graphite / ink tokens. No Inter, Orbitron, or purple/cyan hologram.
 
 - Macrostructure: Photographic. Genre: atmospheric. Tone: cinematic.
-- Nav: N5 floating pill. On small screens the pill hugs Nightwolf + Menu + Baixar; Luz / Efeitos / Cenas sit in a details menu until 60rem. Footer: Ft5 statement.
-- Folds are real Studio / Luz / Efeitos / Cenas captures, framed inside a centered wrap with gutter — never flush to the browser edge. Density is marketing (`--space-xl`–`--space-3xl`), not dashboard.
+- Nav: lighting-console mast (IconRail identity) — full-bleed graphite bar, square cells, `--live` 1px bottom edge and left spine on the current item, icon+text Studio / Luz / Efeitos / Cenas. Not a pill. Mobile: square fader toggle opens a left rail popover. Footer: Ft5 statement (`MIT · motor OpenRGB`, not Windows-only).
+- CTA is the install action: both mast and hero open the same native popover/sheet (PowerShell `irm | iex`, Git Bash `curl | bash`, código-fonte). Square/rect cream fill, hover `--live`. No zip. No scroll-to-download band.
+- Folds are real Studio / Luz / Efeitos / Cenas captures shown whole (1920×1080, `object-fit: contain`) inside a lit well — never cropped, never ken-burned. No motherboard, SKU, or capture-date on the landing.
 - `--live` on the landing is driven by cursor X across `WASH_PRESETS` (`#c9897a` `#d45c5c` `#c4a35a` `#6f9e6a` `#4a7ea8` `#f3ead8`). A follow-spot and chrome glow track `--live`. Until the pointer moves, `--live` stays `#ff4d8d`.
-- Motion: follow-spot (custom props only). Scroll: CSS `animation-timeline: view()` scale on folds; text bands fade once (IntersectionObserver). In-page nav clicks fire a `--live` shutter. `prefers-reduced-motion` and coarse pointers kill the spot, view timelines, and shutter.
+- Motion: follow-spot (custom props only). Scroll: the well lifts (transform/opacity), not the screenshot. Text bands fade once (IntersectionObserver). In-page nav clicks fire a `--live` shutter. `prefers-reduced-motion` and coarse pointers kill the spot, view timelines, and shutter.
 - Do not ship the 5-column feature strip, wash-chip hex row, or a magenta brick CTA.
 
 **Self-score (pre-emit):**

@@ -1,0 +1,24 @@
+# Nightwolf RGB
+
+> Lighting console for PC RGB. The engine is OpenRGB. Nightwolf is MIT-licensed, 100% compatible, and ships the OpenRGB SDK in the bundle. Paint devices, zones, and LEDs; save Nightwolf scenes and native `.orp` profiles. No account. No zip as an install path.
+
+Nightwolf RGB is a desktop lighting console on top of OpenRGB (CalcProgrammer1). The public landing is this GitHub Pages site. The closed build is installed with a one-line script; `nightwolfrgb update` and the in-app Atualizar button also check OpenRGB. Source lives on GitHub under klebertiko/NightwolfRGB.
+
+Do not tell users to download a zip. Do not describe the product as Windows-only: installers exist for PowerShell and Git Bash, and the engine is OpenRGB.
+
+## Product
+
+- [Landing facts](https://klebertiko.github.io/NightwolfRGB/index.md): Name, license, views (Studio, Luz, Efeitos, Cenas), OpenRGB credit, screenshots
+- [HTML landing](https://klebertiko.github.io/NightwolfRGB/): Human page with the same facts
+- [Repository](https://github.com/klebertiko/NightwolfRGB): Source, issues, pull requests
+
+## Install
+
+- [PowerShell installer](https://github.com/klebertiko/NightwolfRGB/releases/latest/download/install.ps1): `irm https://github.com/klebertiko/NightwolfRGB/releases/latest/download/install.ps1 | iex`
+- [Git Bash installer](https://github.com/klebertiko/NightwolfRGB/releases/latest/download/install.sh): `curl -fsSL https://github.com/klebertiko/NightwolfRGB/releases/latest/download/install.sh | bash`
+- [Latest GitHub Release](https://github.com/klebertiko/NightwolfRGB/releases/latest): Closed build the scripts install. After that, `nightwolfrgb update` or Atualizar in-app
+
+## Optional
+
+- [OpenRGB](https://openrgb.org/): The SDK Nightwolf is based on (port 6742)
+- [OpenRGB GitLab](https://gitlab.com/CalcProgrammer1/OpenRGB): Upstream engine source
