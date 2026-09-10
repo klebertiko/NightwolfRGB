@@ -123,3 +123,8 @@ profiles/*.json
 # Allow tracking of example/template configs
 *.local.*
 local/
+
+# === Scratch / agent session junk (not product) ===
+docs/_crops/
+.gauntlet/vite-spawn-*.txt
+.superpowers/

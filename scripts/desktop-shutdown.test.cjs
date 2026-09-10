@@ -119,16 +119,22 @@ test('KILL_TARGETS: covers exactly ports 5173, 3001, 6742', () => {
     assert.deepEqual(ports, [3001, 5173, 6742]);
 });
 
-test('KILL_TARGETS: port 5173 allows only node / node.exe', () => {
+test('KILL_TARGETS: port 5173 allows node + electron (ELECTRON_RUN_AS_NODE children)', () => {
     const t = KILL_TARGETS.find((t) => t.port === 5173);
     assert.ok(t, 'must have an entry for port 5173');
-    assert.deepEqual([...t.names].sort(), ['node', 'node.exe'].sort());
+    assert.deepEqual(
+        [...t.names].sort(),
+        ['electron', 'electron.exe', 'node', 'node.exe'].sort(),
+    );
 });
 
-test('KILL_TARGETS: port 3001 allows only node / node.exe', () => {
+test('KILL_TARGETS: port 3001 allows node + electron (ELECTRON_RUN_AS_NODE children)', () => {
     const t = KILL_TARGETS.find((t) => t.port === 3001);
     assert.ok(t, 'must have an entry for port 3001');
-    assert.deepEqual([...t.names].sort(), ['node', 'node.exe'].sort());
+    assert.deepEqual(
+        [...t.names].sort(),
+        ['electron', 'electron.exe', 'node', 'node.exe'].sort(),
+    );
 });
 
 test('KILL_TARGETS: port 6742 allows only openrgb / openrgb.exe', () => {
@@ -218,4 +224,28 @@ test('quitDesktop: null backendPid — skips spawn, still frees ports and exits 
 
     assert.equal(freePortsCalled, true, 'freePorts must be called even with no backendPid');
     assert.equal(exitCode, 0, 'exit must be called with 0');
+});
+
+test('quitDesktop: servicePids kills backend and vite trees before freePorts', async () => {
+    const killed = [];
+    let freePortsOpts = null;
+
+    const fakeSpawn = (cmd, args) => {
+        killed.push(args[args.indexOf('/PID') + 1]);
+        const cbs = {};
+        const child = { on(ev, fn) { cbs[ev] = fn; return child; } };
+        setImmediate(() => cbs.close?.());
+        return child;
+    };
+
+    await quitDesktop({
+        servicePids: [111, 222, null],
+        spawn: fakeSpawn,
+        exit: () => {},
+        freePorts: async (opts) => { freePortsOpts = opts; },
+        excludePids: [1],
+    });
+
+    assert.deepEqual(killed.sort(), ['111', '222']);
+    assert.deepEqual(freePortsOpts, { excludePids: [1] });
 });

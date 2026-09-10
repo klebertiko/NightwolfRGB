@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useOpenRGB } from './hooks/useOpenRGB';
 import { useDevices } from './hooks/useDevices';
 import { useProfiles } from './hooks/useProfiles';
@@ -13,6 +13,8 @@ import { StatusBar } from './components/StatusBar';
 import { Dashboard } from './components/Dashboard';
 import { LightingStudio } from './components/LightingStudio';
 import { EffectsPanel } from './components/EffectsPanel';
+import { DiscoverView } from './components/DiscoverView';
+import { LibraryView } from './components/LibraryView';
 import { ScenesView } from './components/ScenesView';
 import { CleanupPanel } from './components/CleanupPanel';
 import { UpdatePanel } from './components/UpdatePanel';
@@ -20,7 +22,7 @@ import { CommandPalette, type PaletteAction } from './components/CommandPalette'
 import { ShortcutOverlay } from './components/ShortcutOverlay';
 import type { DeviceData, Profile, ApplyProfileResult } from './types';
 
-const TABS: AppTab[] = ['dashboard', 'lighting', 'effects', 'profiles'];
+const TABS: AppTab[] = ['dashboard', 'lighting', 'discover', 'effects', 'library', 'profiles'];
 const LIVE_DEFAULT = '#ff4d8d';
 
 function paintLive(color: string) {
@@ -33,46 +35,6 @@ function typingInField(target: EventTarget | null) {
     return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target.isContentEditable;
 }
 
-const EffectPreview: React.FC<{ color: string; isActive: boolean; effect: string | null }> = ({ color, isActive, effect }) => {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    useEffect(() => {
-        if (!isActive) return;
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-        let animationId = 0;
-        const render = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const bars = 48;
-            const barWidth = canvas.width / bars;
-            const t = Date.now() / 400;
-            for (let i = 0; i < bars; i++) {
-                const phase = (i / bars) * Math.PI * 2;
-                const wave = (Math.sin(t + phase) + 1) / 2;
-                const h = 12 + wave * (canvas.height * 0.72);
-                ctx.fillStyle = color;
-                ctx.globalAlpha = 0.85;
-                ctx.fillRect(i * barWidth + 3, canvas.height - h, barWidth - 6, h);
-            }
-            animationId = requestAnimationFrame(render);
-        };
-        render();
-        return () => cancelAnimationFrame(animationId);
-    }, [isActive, color, effect]);
-
-    return (
-        <div className="h-full w-full bg-graphite-950/80 relative overflow-hidden">
-            {!isActive && (
-                <p className="absolute inset-0 flex items-center justify-center nw-meta text-ink-mute z-10">
-                    Prévia do efeito · sem captura de áudio
-                </p>
-            )}
-            <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" width={1000} height={200} />
-        </div>
-    );
-};
-
 export default function App() {
     const [activeTab, setActiveTab] = useState<AppTab>('dashboard');
     const [selectedDevice, setSelectedDevice] = useState('all');
@@ -84,6 +46,7 @@ export default function App() {
     const [showUpdatePanel, setShowUpdatePanel] = useState(false);
     const [paletteOpen, setPaletteOpen] = useState(false);
     const [shortcutsOpen, setShortcutsOpen] = useState(false);
+    const [effectsSeedId, setEffectsSeedId] = useState<string | null>(null);
 
     const { connected, deviceCount, status } = useOpenRGB();
     const {
@@ -207,8 +170,10 @@ export default function App() {
         const actions: PaletteAction[] = [
             { id: 'tab-studio', label: 'Studio', hint: '1', group: 'Ir', run: () => setActiveTab('dashboard') },
             { id: 'tab-luz', label: 'Luz', hint: '2', group: 'Ir', run: () => setActiveTab('lighting') },
-            { id: 'tab-fx', label: 'Efeitos', hint: '3', group: 'Ir', run: () => setActiveTab('effects') },
-            { id: 'tab-cenas', label: 'Cenas', hint: '4', group: 'Ir', run: () => setActiveTab('profiles') },
+            { id: 'tab-discover', label: 'Explorar', hint: '3', group: 'Ir', run: () => setActiveTab('discover') },
+            { id: 'tab-fx', label: 'Efeitos', hint: '4', group: 'Ir', run: () => setActiveTab('effects') },
+            { id: 'tab-library', label: 'Biblioteca', hint: '5', group: 'Ir', run: () => setActiveTab('library') },
+            { id: 'tab-cenas', label: 'Cenas', hint: '6', group: 'Ir', run: () => setActiveTab('profiles') },
             { id: 'paint-all', label: 'Pintar tudo', group: 'Luz', run: () => { setSelectedDevice('all'); handleColorChange(globalColor, 'all'); } },
             { id: 'save', label: 'Salvar cena', hint: 'Ctrl+S', group: 'Cena', run: () => setShowProfileDialog(true) },
             { id: 'cleanup', label: 'Limpeza RGB', group: 'Sistema', run: () => setShowCleanupPanel(true) },
@@ -284,7 +249,7 @@ export default function App() {
                 setShortcutsOpen((v) => !v);
                 return;
             }
-            if (e.key >= '1' && e.key <= '4') {
+            if (e.key >= '1' && e.key <= '6') {
                 const tab = TABS[Number(e.key) - 1];
                 if (tab) setActiveTab(tab);
             }
@@ -362,6 +327,23 @@ export default function App() {
                             clearSegments={clearSegments}
                         />
                     )}
+                    {activeTab === 'discover' && (
+                        <DiscoverView
+                            activeEffect={activeEffect}
+                            startEffect={startEffect}
+                            stopEffect={stopEffect}
+                            effectsBusy={effectsBusy}
+                            currentColor={globalColor}
+                            engineEnabled={engine.enabled}
+                            pluginEffects={plugins.pluginEffects}
+                            onStartPluginEffect={plugins.startPluginEffect}
+                            onStopPluginEffect={plugins.stopPluginEffect}
+                            onOpenConsole={(effectId) => {
+                                setEffectsSeedId(effectId);
+                                setActiveTab('effects');
+                            }}
+                        />
+                    )}
                     {activeTab === 'effects' && (
                         <EffectsPanel
                             activeEffect={activeEffect}
@@ -370,11 +352,24 @@ export default function App() {
                             toggleEffect={toggleEffect}
                             effectsBusy={effectsBusy}
                             currentColor={globalColor}
-                            visualizer={<EffectPreview color={globalColor} isActive={Boolean(activeEffect)} effect={activeEffect} />}
                             engineEnabled={engine.enabled}
                             pluginEffects={plugins.pluginEffects}
                             onStartPluginEffect={plugins.startPluginEffect}
                             onStopPluginEffect={plugins.stopPluginEffect}
+                            initialSelectedId={effectsSeedId}
+                        />
+                    )}
+                    {activeTab === 'library' && (
+                        <LibraryView
+                            activeEffect={activeEffect}
+                            startEffect={startEffect}
+                            stopEffect={stopEffect}
+                            currentColor={globalColor}
+                            engineEnabled={engine.enabled}
+                            pluginEffects={plugins.pluginEffects}
+                            onStartPluginEffect={plugins.startPluginEffect}
+                            onStopPluginEffect={plugins.stopPluginEffect}
+                            onOpenDiscover={() => setActiveTab('discover')}
                         />
                     )}
                     {activeTab === 'profiles' && (

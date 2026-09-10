@@ -1,7 +1,7 @@
 import React from 'react';
-import { LayoutGrid, Lamp, Waves, Bookmark, ShieldAlert, Download } from 'lucide-react';
+import { LayoutGrid, Lamp, Compass, Waves, Library, Bookmark, ShieldAlert, Download } from 'lucide-react';
 
-export type AppTab = 'dashboard' | 'lighting' | 'effects' | 'profiles';
+export type AppTab = 'dashboard' | 'lighting' | 'discover' | 'effects' | 'library' | 'profiles';
 
 interface IconRailProps {
     active: AppTab;
@@ -14,7 +14,9 @@ interface IconRailProps {
 const items: { id: AppTab; label: string; icon: React.ReactNode }[] = [
     { id: 'dashboard', label: 'Studio', icon: <LayoutGrid size={16} /> },
     { id: 'lighting', label: 'Luz', icon: <Lamp size={16} /> },
+    { id: 'discover', label: 'Explorar', icon: <Compass size={16} /> },
     { id: 'effects', label: 'Efeitos', icon: <Waves size={16} /> },
+    { id: 'library', label: 'Biblioteca', icon: <Library size={16} /> },
     { id: 'profiles', label: 'Cenas', icon: <Bookmark size={16} /> },
 ];
 
@@ -29,8 +31,8 @@ export const IconRail: React.FC<IconRailProps> = ({ active, onChange, onCleanup,
                         type="button"
                         onClick={() => onChange(item.id)}
                         aria-current={on ? 'page' : undefined}
-                        className={`flex items-center gap-2.5 min-h-11 px-2.5 rounded-xl nw-body ${
-                            on ? 'bg-graphite-600 text-ink shadow-ember' : 'text-ink-dim hover:text-ink hover:bg-graphite-700'
+                        className={`nw-rail-item flex items-center gap-2.5 min-h-11 px-2.5 rounded-sm nw-body ${
+                            on ? 'is-active text-ink' : 'text-ink-dim hover:text-ink hover:bg-graphite-700'
                         }`}
                     >
                         <span className={on ? 'text-ember' : ''}>{item.icon}</span>
@@ -42,7 +44,7 @@ export const IconRail: React.FC<IconRailProps> = ({ active, onChange, onCleanup,
             <button
                 type="button"
                 onClick={onUpdate}
-                className="flex items-center gap-2.5 min-h-11 px-2.5 rounded-xl nw-body text-ink-dim hover:text-ink hover:bg-graphite-700"
+                className="nw-rail-item flex items-center gap-2.5 min-h-11 px-2.5 rounded-sm nw-body text-ink-dim hover:text-ink hover:bg-graphite-700"
             >
                 <Download size={16} />
                 Atualizar
@@ -50,7 +52,7 @@ export const IconRail: React.FC<IconRailProps> = ({ active, onChange, onCleanup,
             <button
                 type="button"
                 onClick={onCleanup}
-                className="relative flex items-center gap-2.5 min-h-11 px-2.5 rounded-xl nw-body text-ink-dim hover:text-red-400 hover:bg-red-950/40"
+                className="nw-rail-item relative flex items-center gap-2.5 min-h-11 px-2.5 rounded-sm nw-body text-ink-dim hover:text-red-400 hover:bg-red-950/40"
             >
                 <ShieldAlert size={16} />
                 Limpeza

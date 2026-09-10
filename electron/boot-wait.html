@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nightwolf RGB</title>
+  <style>
+    html, body {
+      margin: 0; height: 100%;
+      background: #0c0b0a; color: #f3ead8;
+      font-family: "IBM Plex Sans", system-ui, sans-serif;
+      display: grid; place-items: center;
+    }
+    main { max-width: 28rem; padding: 2rem; text-align: center; }
+    h1 { font-size: 1.25rem; font-weight: 700; margin: 0 0 0.75rem; }
+    p { margin: 0 0 0.75rem; color: color-mix(in srgb, #f3ead8 62%, #0c0b0a); line-height: 1.5; font-size: 0.9375rem; }
+    code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.8125rem; color: #e07a3d; }
+    .status { font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: color-mix(in srgb, #f3ead8 38%, #0c0b0a); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Carregando a interface…</h1>
+    <p>O servidor local (Vite em <code>127.0.0.1:5173</code>) ainda não respondeu. Tentando de novo automaticamente — não precisa fechar.</p>
+    <p class="status" id="status">Aguardando Vite…</p>
+  </main>
+  <script>
+    const DEV = 'http://127.0.0.1:5173/';
+    const status = document.getElementById('status');
+    let tries = 0;
+    async function poke() {
+      tries += 1;
+      status.textContent = 'Tentativa ' + tries + '…';
+      try {
+        const res = await fetch(DEV, { cache: 'no-store' });
+        if (res.ok || res.type === 'opaque') {
+          location.replace(DEV);
+          return;
+        }
+      } catch (_) { /* still down */ }
+      setTimeout(poke, 1000);
+    }
+    poke();
+  </script>
+</body>
+</html>

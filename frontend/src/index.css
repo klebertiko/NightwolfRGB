@@ -10,6 +10,130 @@
 
 /* Hallmark · genre: atmospheric · macrostructure: Workbench · design-system: design.md · designed-as-app */
 
+.nw-workbench {
+  background: #0c0b0a;
+}
+
+/* Explorar — catalog browse (not workbench list, not Signal marketplace) */
+.nw-discover {
+  background: #0c0b0a;
+}
+
+.nw-discover-main {
+  background: #0c0b0a;
+}
+
+.nw-discover-featured {
+  border-bottom: 1px solid rgb(243 234 216 / 0.08);
+}
+
+.nw-discover-hero {
+  width: min(14rem, 42vw);
+  background: #141210;
+}
+
+.nw-discover-hero-thumb,
+.nw-discover-hero .nw-thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.nw-discover-hero-thumb .nw-thumb-svg,
+.nw-discover-hero .nw-thumb-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.nw-discover-card {
+  background: #141210;
+  border-left: 2px solid transparent;
+}
+
+.nw-discover-card[data-selected='true'] {
+  border-left-color: var(--live);
+}
+
+.nw-discover-card-thumb,
+.nw-discover-card .nw-thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.nw-discover-card-thumb .nw-thumb-svg,
+.nw-discover-card .nw-thumb-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.nw-discover-detail {
+  width: min(36%, 22rem);
+  min-width: 16rem;
+  background: #141210;
+}
+
+.nw-discover-preview {
+  height: clamp(10rem, 28vh, 14rem);
+  border-bottom: 1px solid rgb(243 234 216 / 0.1);
+  overflow: hidden;
+}
+
+.nw-workbench-master {
+  width: min(42%, 22rem);
+  min-width: 16rem;
+  background: #141210;
+  overflow: visible;
+}
+
+.nw-workbench-detail {
+  background: #0c0b0a;
+  overflow: visible;
+}
+
+.nw-workbench-preview {
+  height: clamp(10rem, 28vh, 14rem);
+  border-bottom: 1px solid rgb(243 234 216 / 0.1);
+  overflow: hidden;
+}
+
+.nw-workbench-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  overflow: visible;
+  padding-bottom: 0.15rem;
+}
+
+.nw-workbench-row {
+  border: 1px solid transparent;
+  border-left: 2px solid transparent;
+}
+
+.nw-workbench-row:hover {
+  background: #1c1a17;
+}
+
+.nw-workbench-row[data-selected='true'] {
+  background: #1c1a17;
+  border-left-color: var(--live);
+}
+
+.nw-workbench-row-thumb,
+.nw-thumb-row {
+  width: 2.5rem;
+  height: 1.75rem;
+  border-radius: 0.125rem;
+  overflow: hidden;
+}
+
+.nw-thumb-row .nw-thumb-svg {
+  width: 100%;
+  height: 100%;
+}
+
 .nw-tile {
   border-radius: 0.875rem;
   border: 1px solid rgb(243 234 216 / 0.08);
@@ -48,13 +172,178 @@
   align-items: center;
   height: 1.25rem;
   padding: 0 0.5rem;
-  border-radius: 999px;
+  border-radius: 0.125rem;
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #8a8172;
   background: #1c1a17;
+}
+
+/* Icon rail — square rows + live spine (design.md), not marketplace pills */
+.nw-rail-item {
+  border-left: 2px solid transparent;
+}
+
+.nw-rail-item.is-active {
+  background: #1c1a17;
+  border-left-color: var(--live);
+}
+
+/* Discover effect thumbs — atmospheric key-art scenes, not schematic glyphs */
+.nw-thumb {
+  --thumb-color: #ff4d8d;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0c0b0a;
+}
+
+.nw-thumb-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.nw-thumb-live {
+  filter: saturate(1.2) brightness(1.08);
+}
+
+.nw-thumb-spotlight {
+  filter: saturate(1.15) contrast(1.05);
+}
+
+.nw-thumb-static .nw-thumb-ember,
+.nw-thumb-static .nw-thumb-heat-core {
+  animation: nw-thumb-ember 2.8s ease-in-out infinite;
+}
+
+.nw-thumb-breathing .nw-thumb-blob,
+.nw-thumb-breathing .nw-thumb-blob-core {
+  transform-origin: 230px 140px;
+  animation: nw-thumb-breathe 2.4s ease-in-out infinite;
+}
+
+.nw-thumb-breathing .nw-thumb-blob-core {
+  animation-name: nw-thumb-breathe-core;
+}
+
+.nw-thumb-strobing .nw-thumb-lightning,
+.nw-thumb-strobing .nw-thumb-lightning-branch {
+  animation: nw-thumb-strobe 0.7s steps(2) infinite;
+  transform-origin: center;
+}
+
+.nw-thumb-rainbow .nw-thumb-nebula {
+  animation: nw-thumb-nebula-drift 7s ease-in-out infinite;
+}
+
+.nw-thumb-rainbow .nw-thumb-star {
+  animation: nw-thumb-particle 2.8s ease-in-out infinite;
+}
+
+.nw-thumb-spectrum .nw-thumb-aurora {
+  animation: nw-thumb-wave 4s ease-in-out infinite;
+}
+
+.nw-thumb-canvas .nw-thumb-wave-band {
+  animation: nw-thumb-wave 2.8s ease-in-out infinite;
+}
+
+.nw-thumb-custom .nw-thumb-flame,
+.nw-thumb-custom .nw-thumb-heat-core {
+  animation: nw-thumb-ember 2.2s ease-in-out infinite;
+}
+
+.nw-thumb-plugin .nw-thumb-particle {
+  animation: nw-thumb-particle 2.6s ease-in-out infinite;
+}
+
+.nw-thumb-plugin .nw-thumb-p-1 { animation-delay: 0.4s; }
+.nw-thumb-plugin .nw-thumb-p-2 { animation-delay: 0.8s; }
+.nw-thumb-plugin .nw-thumb-p-3 { animation-delay: 1.2s; }
+
+@keyframes nw-thumb-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.88);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes nw-thumb-breathe-core {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.75);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes nw-thumb-strobe {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0.08;
+  }
+}
+
+@keyframes nw-thumb-wave {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes nw-thumb-ember {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: translateY(-4px) scale(1.06);
+  }
+}
+
+@keyframes nw-thumb-nebula-drift {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: translate(0, 0);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(6px, -4px);
+  }
+}
+
+@keyframes nw-thumb-particle {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
 }
 
 html,
@@ -206,4 +495,127 @@ input[type='color']::-webkit-color-swatch {
   letter-spacing: 0;
   font-variant-numeric: tabular-nums;
   line-height: 1;
+}
+
+/* Canvas layout — continuous 2D effect field under device rectangles.
+   Diagonal hue matches scripts/canvas-layout.cjs sampleHorizontalRainbow (X+Y). */
+.nw-canvas-effect-field {
+  background-image: linear-gradient(
+    135deg,
+    #e11d48 0%,
+    #eab308 20%,
+    #22c55e 40%,
+    #3b82f6 60%,
+    #a855f7 80%,
+    #e11d48 100%
+  );
+  background-size: 200% 200%;
+  background-position: 0% 0%;
+  opacity: 0.42;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.nw-canvas-effect-field--live {
+  opacity: 0.72;
+  animation: nw-canvas-wave-field 5s linear infinite;
+}
+
+@keyframes nw-canvas-wave-field {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+/* Device placements are translucent samplers — outline + label only so the
+   effect field stays continuous (incl. Y) through each rect (SignalRGB bar). */
+.nw-canvas-device-cell {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+.nw-canvas-device-label {
+  text-shadow:
+    0 0 4px rgba(0, 0, 0, 0.85),
+    0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Per-LED sample markers (SignalRGB star samplers) — no opaque fill on the cell */
+.nw-canvas-led-layer {
+  z-index: 0;
+}
+
+/* OpenRGB matrix → cell-tiled silhouette; nulls are punched structural voids */
+.nw-canvas-led-matrix {
+  z-index: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.nw-canvas-led-matrix-void {
+  /* Opaque graphite punches — mask the continuous field so lit windows read as
+     field-colored wells against a dark silhouette (SignalRGB matrix bar). */
+  background-color: #0c0b0a;
+  background-image: none;
+  border: none;
+  min-width: 0;
+  min-height: 0;
+  opacity: 1;
+  mix-blend-mode: normal;
+}
+
+.nw-canvas-led-matrix-lit {
+  /* Field windows — transparent so .nw-canvas-effect-field shows through;
+     thin rim only for key readability (no opaque ember slab). */
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-sizing: border-box;
+  opacity: 1;
+  mix-blend-mode: normal;
+}
+
+.nw-canvas-led-matrix-lit--live {
+  /* Animation lives on the field underneath; keep fill open. Subtle rim only. */
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.32);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+}
+
+.nw-canvas-led-sample {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background-color: rgba(255, 255, 255, 0.82);
+  /* Four-pointed star / cross sampler */
+  clip-path: polygon(
+    50% 0%,
+    62% 38%,
+    100% 50%,
+    62% 62%,
+    50% 100%,
+    38% 62%,
+    0% 50%,
+    38% 38%
+  );
+  opacity: 0.9;
+  box-shadow: none;
+}
+
+.nw-canvas-led-sample--live {
+  /* Pick up continuous field hue via screen blend (tint without opaque rect) */
+  mix-blend-mode: screen;
+  background-color: rgba(255, 240, 220, 0.95);
+  opacity: 1;
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.35));
 }

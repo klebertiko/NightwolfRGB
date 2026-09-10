@@ -7,10 +7,18 @@ const fs = require('fs');
 const { quitDesktop } = require('../scripts/desktop-shutdown.cjs');
 const { freePorts } = require('../scripts/free-desktop-ports.cjs');
 const { restoreOrCreateWindow } = require('../scripts/desktop-restore.cjs');
+const {
+    BACKEND_PORT: DEFAULT_BACKEND_PORT,
+    DEV_FRONTEND_PORT,
+    resolveBootPlan,
+    beginCloseQuit,
+    viteSpawn,
+    backendSpawn,
+} = require('../scripts/desktop-boot.cjs');
 
 const isDev = !app.isPackaged;
-const BACKEND_PORT = Number(process.env.SERVER_PORT || 3001);
-const DEV_URL = process.env.NIGHTWOLF_DEV_URL || 'http://127.0.0.1:5173';
+const BACKEND_PORT = Number(process.env.SERVER_PORT || DEFAULT_BACKEND_PORT);
+const DEV_URL = process.env.NIGHTWOLF_DEV_URL || `http://127.0.0.1:${DEV_FRONTEND_PORT}`;
 
 if (isDev) {
     app.commandLine.appendSwitch('remote-debugging-port', '9229');
@@ -18,12 +26,13 @@ if (isDev) {
 
 let mainWindow = null;
 let backendProcess = null;
+let frontendProcess = null;
 
 /** Prevents double-quit when both the IPC handler and the close event fire. */
 let quitting = false;
 
 /**
- * Kills the backend process tree, frees Nightwolf ports, then exits Electron.
+ * Kills service trees, frees Nightwolf ports, then exits Electron.
  * Safe to call from multiple code paths — the quitting flag blocks re-entry.
  */
 function initiateQuit() {
@@ -31,13 +40,14 @@ function initiateQuit() {
     quitting = true;
     const hardExit = setTimeout(() => app.exit(0), 6000);
     quitDesktop({
-        backendPid: backendProcess?.pid ?? null,
+        servicePids: [backendProcess?.pid, frontendProcess?.pid],
         spawn,
         exit: (code) => {
             clearTimeout(hardExit);
             app.exit(code);
         },
         freePorts,
+        excludePids: [process.pid],
     }).catch((err) => {
         console.error('Nightwolf desktop shutdown error:', err);
         clearTimeout(hardExit);
@@ -91,6 +101,9 @@ if (!gotLock) {
     app.quit();
 } else {
     app.on('second-instance', () => {
+        // Mid-quit the window is hidden and Vite/backend ports are dying —
+        // restoring here is the black-screen reopen flash.
+        if (quitting) return;
         restoreOrCreateWindow(mainWindow, { create: createWindow });
     });
 }
@@ -128,14 +141,11 @@ function waitForHttp(url, timeoutMs = 45000) {
 function startBackend() {
     if (backendProcess) return;
     const backendDir = path.join(__dirname, '..', 'backend');
-    const npmCmd = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-    const args = isDev ? ['run', 'dev'] : ['run', 'start'];
-    backendProcess = spawn(npmCmd, args, {
-        cwd: backendDir,
-        stdio: 'inherit',
-        shell: false,
-        windowsHide: true,
-        env: { ...process.env, FORCE_COLOR: '1' },
+    const { command, args, options } = backendSpawn(backendDir, isDev);
+    backendProcess = spawn(command, args, options);
+    backendProcess.on('error', (err) => {
+        console.error('Nightwolf backend spawn error:', err);
+        backendProcess = null;
     });
     backendProcess.on('exit', (code) => {
         backendProcess = null;
@@ -145,9 +155,40 @@ function startBackend() {
     });
 }
 
-async function ensureBackend() {
-    if (await portOpen(BACKEND_PORT)) return;
-    startBackend();
+function startFrontend() {
+    if (frontendProcess) return;
+    const frontendDir = path.join(__dirname, '..', 'frontend');
+    const { command, args, options } = viteSpawn(frontendDir);
+    frontendProcess = spawn(command, args, options);
+    frontendProcess.on('error', (err) => {
+        console.error('Nightwolf frontend (Vite) spawn error:', err);
+        frontendProcess = null;
+    });
+    frontendProcess.on('exit', (code) => {
+        frontendProcess = null;
+        if (code && code !== 0) {
+            console.error(`Nightwolf frontend (Vite) exited with code ${code}`);
+        }
+    });
+}
+
+async function ensureServices() {
+    // Reap zombies from a previous unclean exit before binding again.
+    try {
+        freePorts({ excludePids: [process.pid] });
+    } catch (err) {
+        console.error('Nightwolf freePorts before boot:', err);
+    }
+
+    const plan = resolveBootPlan({
+        isDev,
+        backendOpen: await portOpen(BACKEND_PORT),
+        frontendOpen: await portOpen(DEV_FRONTEND_PORT),
+    });
+    if (plan.startBackend) startBackend();
+    if (plan.startFrontend) startFrontend();
+    // UI first — backend can lag without leaving a blank/black shell.
+    if (isDev) await waitForHttp(DEV_URL);
     await waitForHttp(`http://127.0.0.1:${BACKEND_PORT}/api/status`);
 }
 
@@ -195,10 +236,16 @@ function createWindow() {
     mainWindow.on('close', (event) => {
         if (quitting) return;
         // Keep the HWND until app.exit so the taskbar / Start Menu can restore
-        // instead of grouping a lock-holder with no window.
+        // instead of grouping a lock-holder with no window. Quit flag first so
+        // second-instance cannot show a black shell while ports die.
         event.preventDefault();
-        if (mainWindow && !mainWindow.isDestroyed()) mainWindow.hide();
-        initiateQuit();
+        beginCloseQuit({
+            quitting,
+            initiateQuit,
+            hide: () => {
+                if (mainWindow && !mainWindow.isDestroyed()) mainWindow.hide();
+            },
+        });
     });
 
     mainWindow.on('closed', () => {
@@ -220,8 +267,13 @@ function createWindow() {
     mainWindow.webContents.on('did-fail-load', (_event, errorCode, description, url) => {
         console.error(`Nightwolf renderer failed to load (${errorCode}) ${description} ${url}`);
         if (!isDev || errorCode === -3 || !mainWindow || mainWindow.isDestroyed()) return;
-        setTimeout(() => {
-            if (mainWindow && !mainWindow.isDestroyed()) mainWindow.loadURL(DEV_URL);
+        setTimeout(async () => {
+            if (!mainWindow || mainWindow.isDestroyed()) return;
+            if (await portOpen(DEV_FRONTEND_PORT)) {
+                mainWindow.loadURL(DEV_URL);
+                return;
+            }
+            mainWindow.loadFile(path.join(__dirname, 'boot-wait.html'));
         }, 800);
     });
 
@@ -252,20 +304,30 @@ ipcMain.on('window:maximize', () => {
     else win.maximize();
 });
 ipcMain.on('window:close', () => {
-    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.hide();
-    initiateQuit();
+    beginCloseQuit({
+        quitting,
+        initiateQuit,
+        hide: () => {
+            if (mainWindow && !mainWindow.isDestroyed()) mainWindow.hide();
+        },
+    });
 });
 
 app.whenReady().then(async () => {
+    let servicesReady = false;
     try {
-        await ensureBackend();
-        if (isDev) await waitForHttp(DEV_URL);
+        await ensureServices();
+        servicesReady = true;
     } catch (error) {
         console.error('Nightwolf desktop failed to start services:', error);
     }
     ensureWindowsShortcut();
     createWindow();
+    if (!servicesReady && isDev && mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.loadFile(path.join(__dirname, 'boot-wait.html'));
+    }
     app.on('activate', () => {
+        if (quitting) return;
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
 });
