@@ -72,7 +72,8 @@
   <style>
     /* Hallmark · genre: atmospheric · macrostructure: Photographic · tone: cinematic · anchor: --live */
     /* Hallmark · nav: console mast · footer: thin site-foot · design-system: design.md */
-    /* Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V5 */
+    /* Hallmark · rhythm: hero → engine trust → tour stops (copy+shot) → cleanup */
+    /* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V4 */
     :root {
       --paper: #0c0b0a;
       --panel: #1a1713;
@@ -96,6 +97,8 @@
       --measure: 58ch;
       --gutter: clamp(1.5rem, 5.5vw, 3rem);
       --page: 68rem;
+      /* Same inset on hero + tour wells — vw padding made the smaller hero frame look thicker */
+      --stage-inset: 0.5rem;
       --nav-offset: calc(3.5rem + env(safe-area-inset-top, 0px));
       --radius: 1rem;
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -305,11 +308,12 @@
       gap: 0.5rem;
       flex-shrink: 0;
       min-height: 2.25rem;
-      padding: 0 0.9rem 0 0.7rem;
+      padding: 0 0.9rem 0 0.85rem;
       border: 0;
       border-radius: 0;
       background: var(--inset);
       color: var(--ink);
+      /* One fader mark + hairline — do not also paint ::before (reads as a thick pink frame) */
       box-shadow:
         inset 2px 0 0 var(--live),
         0 0 0 1px color-mix(in srgb, var(--live) 38%, transparent);
@@ -319,14 +323,6 @@
       font-weight: 500;
       white-space: nowrap;
       cursor: pointer;
-    }
-
-    .cta::before {
-      content: "";
-      width: 2px;
-      height: 0.7em;
-      background: var(--live);
-      flex-shrink: 0;
     }
 
     .cta:active {
@@ -633,19 +629,19 @@
     .stage__well {
       min-width: 0;
       max-width: 100%;
-      padding: clamp(0.65rem, 1.6vw, 1.5rem);
+      padding: var(--stage-inset);
       background:
         radial-gradient(
           70% 80% at 50% 42%,
-          color-mix(in srgb, var(--live) 22%, transparent),
+          color-mix(in srgb, var(--live) 16%, transparent),
           transparent 72%
         ),
         var(--inset);
-      border-radius: calc(var(--radius) + 0.35rem);
+      border-radius: calc(var(--radius) + 0.2rem);
       box-shadow:
-        0 0 0 1px color-mix(in srgb, var(--live) 20%, transparent),
-        0 0 80px color-mix(in srgb, var(--live) 18%, transparent),
-        0 28px 64px rgb(0 0 0 / 0.55);
+        0 0 0 1px color-mix(in srgb, var(--live) 16%, transparent),
+        0 0 40px color-mix(in srgb, var(--live) 10%, transparent),
+        0 18px 40px rgb(0 0 0 / 0.45);
     }
 
     .stage__img {
@@ -661,15 +657,51 @@
       display: block;
     }
 
-    .shot {
-      padding-block: var(--space-m);
+    /* Tour stop — instruct, then show the window (one job per section) */
+    .tour {
+      padding-block: var(--space-2xl);
     }
 
-    .shot figcaption,
+    .tour--panel {
+      background-color: color-mix(in srgb, var(--panel) 78%, transparent);
+    }
+
+    .tour__intro {
+      margin: 0 0 var(--space-m);
+      max-width: var(--measure);
+    }
+
+    .tour__intro h2 {
+      margin: 0;
+      max-width: 22rem;
+      font-family: var(--font-display);
+      font-size: clamp(1.65rem, 1.15rem + 2vw, 2.75rem);
+      font-weight: 700;
+      font-style: normal;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      overflow-wrap: anywhere;
+    }
+
+    .tour__intro p {
+      margin: var(--space-s) 0 0;
+      color: var(--ink-mute);
+    }
+
+    .tour .stage {
+      width: min(100%, 86rem);
+    }
+
     .stage figcaption {
       margin: var(--space-s) 0 0;
       font-size: 0.8125rem;
       color: var(--ink-mute);
+    }
+
+    @media (min-width: 60rem) {
+      .tour {
+        padding-block: var(--space-3xl);
+      }
     }
 
     @supports (animation-timeline: view()) {
@@ -991,67 +1023,55 @@
       </div>
     </section>
 
-    <section class="shot" id="luz" aria-labelledby="luz-cap">
-      <div class="wrap wrap--stage">
+    <section class="band band--inset reveal" aria-labelledby="clean-title">
+      <div class="wrap">
+        <h2 id="clean-title">Antes de pintar: libere o hardware.</h2>
+        <p>A Limpeza lista processos RGB que brigam pela mesma placa. Detecta iCUE, Armoury Crate, Aura, Synapse, Mystic Light, CAM, RGB Fusion, Polychrome, SignalRGB, G HUB, SteelSeries GG, NGENUITY e afins. Fecha só o que você pede — e só quando você manda.</p>
+      </div>
+    </section>
+
+    <section class="tour reveal" id="luz" aria-labelledby="luz-title">
+      <div class="wrap">
+        <div class="tour__intro">
+          <h2 id="luz-title">Primeiro: pinte na Luz.</h2>
+          <p>Escolha o device, a zona, o LED. Header vazio? O slider manda o tamanho. Direct, Static, Breathing, Color Cycle — os modos que a placa declara, com os parâmetros que cada um aceita.</p>
+        </div>
         <figure class="stage">
           <div class="stage__well">
             <img class="stage__img" src="images/luz.png?v=20260910a" width="1920" height="1080" loading="lazy" decoding="async"
                  alt="Vista Luz do Nightwolf RGB: device, zona, modos hardware e o campo de cor.">
           </div>
-          <figcaption id="luz-cap">Cada LED. Device, zona, header.</figcaption>
         </figure>
       </div>
     </section>
 
-    <section class="band band--panel reveal">
+    <section class="tour tour--panel reveal" id="efeitos" aria-labelledby="efeitos-title">
       <div class="wrap">
-        <h2>Não é uma cor no gabinete. É cada LED.</h2>
-        <p>Na Luz você escolhe o device, a zona, o LED. Header vazio? O slider manda o tamanho. Direct, Static, Breathing, Color Cycle — os modos que a placa declara, com os parâmetros que cada um aceita.</p>
-      </div>
-    </section>
-
-    <section class="shot" id="efeitos" aria-labelledby="efeitos-cap">
-      <div class="wrap wrap--stage">
+        <div class="tour__intro">
+          <h2 id="efeitos-title">Depois: anime no hardware.</h2>
+          <p>Estático, Respirar, Estrobo, Arco-íris, Espectro, Sequência. Velocidade no slider. Direct, sem microfone. Sem loja. Sem baixar pacote.</p>
+        </div>
         <figure class="stage">
           <div class="stage__well">
             <img class="stage__img" src="images/efeitos.png?v=20260910a" width="1920" height="1080" loading="lazy" decoding="async"
                  alt="Tela Efeitos do Nightwolf RGB: Arco-íris ao vivo no hardware, Direct, sem microfone.">
           </div>
-          <figcaption id="efeitos-cap">Arco-íris no hardware. Direct, sem microfone.</figcaption>
         </figure>
       </div>
     </section>
 
-    <section class="band reveal">
+    <section class="tour reveal" id="cenas" aria-labelledby="cenas-title">
       <div class="wrap">
-        <h2>Arco-íris no hardware. Sem loja.</h2>
-        <p>Estático, Respirar, Estrobo, Arco-íris, Espectro, Sequência. Velocidade no slider. Direct, sem microfone. Se o plugin Effects já estiver no OpenRGB do bundle, liga e desliga por nome. Sem instalar. Sem baixar.</p>
-      </div>
-    </section>
-
-    <section class="shot" id="cenas" aria-labelledby="cenas-cap">
-      <div class="wrap wrap--stage">
+        <div class="tour__intro">
+          <h2 id="cenas-title">Guarde o estado. Ou o perfil nativo.</h2>
+          <p>Cena Nightwolf grava o estado neste app. Perfil .orp é o arquivo do OpenRGB: carregar, salvar, apagar. Os dois na mesma tela — separados de propósito.</p>
+        </div>
         <figure class="stage">
           <div class="stage__well">
             <img class="stage__img" src="images/cenas.png?v=20260910a" width="1920" height="1080" loading="lazy" decoding="async"
                  alt="Cenas do Nightwolf RGB: cena do app de um lado, perfil nativo OpenRGB do outro.">
           </div>
-          <figcaption id="cenas-cap">Cena Nightwolf num lado. Perfil .orp no outro.</figcaption>
         </figure>
-      </div>
-    </section>
-
-    <section class="band band--panel reveal">
-      <div class="wrap">
-        <h2>Cena Nightwolf não é perfil .orp.</h2>
-        <p>Cena grava o estado neste app. Perfil .orp é o arquivo nativo do OpenRGB: carregar, salvar, apagar. Os dois na mesma tela. Separados.</p>
-      </div>
-    </section>
-
-    <section class="band band--inset reveal" aria-labelledby="clean-title">
-      <div class="wrap">
-        <h2 id="clean-title">Mate o que conflita. O SDK precisa do hardware livre.</h2>
-        <p>A Limpeza varre processos RGB que brigam pela mesma placa e conflitam com o OpenRGB. Detecta iCUE, Armoury Crate, Aura, Synapse, Mystic Light, CAM, RGB Fusion, Polychrome, SignalRGB, G HUB, SteelSeries GG, NGENUITY e afins. Lista pelo nome o que está rodando. Fecha só o que você pede — e só quando você manda.</p>
       </div>
     </section>
   </main>
