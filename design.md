@@ -44,10 +44,23 @@ Genre DNA from two Dribbble presentation pieces (living-room overlay + Novara hu
 - Pill-shaped nav, orange glow, fixed ember that ignores the hardware wash
 - Emoji as icons; Lucide only
 
+## App surfaces (IA)
+
+Six rail tabs — Studio · Luz · Explorar · Efeitos · Biblioteca · Cenas.
+
+| Tab | Role |
+|---|---|
+| Explorar (`discover`) | Honest catalog browse (featured + grid + detail rail). |
+| Efeitos (`effects`) | Live console. Selection = UI preview; Apply = hardware. |
+| Biblioteca (`library`) | Installed-only. Empty → CTA to Explorar. |
+
+Locked decision: [docs/adr/0001-three-surface-effects-ia.md](docs/adr/0001-three-surface-effects-ia.md).
+
 ## Desktop interaction
 
 - Master–detail on Luz; Studio is the glanceable mural
-- Keyboard: `1–4` tabs, `Ctrl+K` palette, `Ctrl+S` save scene, `Esc` dismiss, `?` overlay
+- Keyboard: `1–6` tabs, `Ctrl+K` palette, `Ctrl+S` save scene, `Esc` dismiss, `?` overlay
+- Titlebar chrome: min-height ≥ 44px, `overflow-visible` on header and BrandMark wrapper
 - Primary actions ≥ 36px tall; focus ring is `--live`
 - Visible labels on dialogs; icon+text on the rail (not icon-only)
 - `prefers-reduced-motion` already kills decorative timing
@@ -94,7 +107,7 @@ Desktop 1440×900. Spacing is dashboard-dense (8–24px), not marketing (48–96
 - Macrostructure: Photographic. Genre: atmospheric. Tone: cinematic.
 - Nav: lighting-console mast (IconRail identity) — full-bleed graphite bar, square cells, `--live` 1px bottom edge and left spine on the current item, icon+text Studio / Luz / Efeitos / Cenas. Not a pill. Mobile: square fader toggle opens a left rail popover. Footer: thin `site-foot` row — `Nightwolf RGB` + `MIT · OpenRGB · GitHub` (no hero echo, not Windows-only). No pre-footer “Código aberto / Fork” band (GitHub lives in the footer; clone/dev commands stay in docs).
 - CTA is the install action: both mast and hero open the same native popover/sheet (PowerShell `irm | iex`, Git Bash `curl | bash`, código-fonte). Square console chip — inset graphite, ink type, 2px `--live` fader mark, hairline live edge. Hover tracks `--live`. Pressed is inset. No zip. No scroll-to-download band.
-- Folds are real Studio / Luz / Efeitos / Cenas captures shown whole (1920×1080, `object-fit: contain`) inside a lit well — never cropped, never ken-burned. No motherboard, SKU, or capture-date on the landing.
+- Folds are real Studio / Luz / Efeitos / Cenas captures shown whole (1920×1080, `object-fit: contain`) inside a lit well — never cropped, never ken-burned. Hero and tour wells share one `--stage-inset` (no vw padding that thickens the smaller hero frame). Landing rhythm: hero → OpenRGB trust → cleanup → tour stops (copy then shot: Luz → Efeitos → Cenas). No motherboard, SKU, or capture-date on the landing.
 - `--live` on the landing is driven by cursor X across `WASH_PRESETS` (`#c9897a` `#d45c5c` `#c4a35a` `#6f9e6a` `#4a7ea8` `#f3ead8`). A follow-spot and chrome glow track `--live`. Until the pointer moves, `--live` stays `#ff4d8d`.
 - Motion: follow-spot (custom props only). Scroll: the well lifts (transform/opacity), not the screenshot. Text bands fade once (IntersectionObserver). In-page nav clicks fire a `--live` shutter. `prefers-reduced-motion` and coarse pointers kill the spot, view timelines, and shutter.
 - Do not ship the 5-column feature strip, wash-chip hex row, or a magenta brick CTA.
