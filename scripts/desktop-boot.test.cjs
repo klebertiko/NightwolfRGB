@@ -68,15 +68,19 @@ test('resolveNodeExecutable: outside Electron uses execPath as plain node', () =
     assert.deepEqual(resolved, { command: 'C:\\\\tools\\\\node.exe', asElectronNode: false });
 });
 
-test('resolveNodeExecutable: under Electron prefers PATH node.exe', () => {
+test('resolveNodeExecutable: under Electron prefers PATH node binary', () => {
+    const bin = process.platform === 'win32' ? 'node.exe' : 'node';
+    const dir = process.platform === 'win32' ? 'C:\\vfox\\nodejs' : '/opt/vfox/nodejs';
+    const execPath =
+        process.platform === 'win32' ? 'C:\\Electron\\electron.exe' : '/opt/Electron/electron';
     const resolved = resolveNodeExecutable({
         electron: true,
-        execPath: 'C:\\\\Electron\\\\electron.exe',
-        pathEnv: 'C:\\\\vfox\\\\nodejs',
-        existsSync: (p) => p.replace(/\\/g, '/').endsWith('vfox/nodejs/node.exe'),
+        execPath,
+        pathEnv: dir,
+        existsSync: (p) => p.replace(/\\/g, '/').endsWith(`vfox/nodejs/${bin}`),
     });
     assert.equal(resolved.asElectronNode, false);
-    assert.match(resolved.command.replace(/\\/g, '/'), /vfox\/nodejs\/node\.exe$/);
+    assert.match(resolved.command.replace(/\\/g, '/'), new RegExp(`vfox/nodejs/${bin.replace('.', '\\.')}$`));
 });
 
 test('resolveNodeExecutable: Electron fallback uses execPath + asElectronNode', () => {
