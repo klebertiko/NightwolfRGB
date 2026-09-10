@@ -125,6 +125,9 @@ profiles/*.json
 local/
 
 # === Scratch / agent session junk (not product) ===
-docs/_crops/
-.gauntlet/vite-spawn-*.txt
+.gauntlet/
+.harness/
 .superpowers/
+docs/_crops/
+docs/_retired-brand/
+gauntlet-*.html

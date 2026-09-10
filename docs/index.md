@@ -33,10 +33,16 @@ From a clone: `npm install` then `npm run desktop`.
 
 ## Views
 
+In-app rail (shortcuts `1–6`): Studio · Luz · Explorar · Efeitos · Biblioteca · Cenas.
+
+Landing page anchors (screenshot folds):
+
 - [Studio](https://klebertiko.github.io/NightwolfRGB/#studio): live stage of connected hardware
 - [Luz](https://klebertiko.github.io/NightwolfRGB/#luz): device, zone, modes, per-LED colour
-- [Efeitos](https://klebertiko.github.io/NightwolfRGB/#efeitos): hardware effects (Direct, no microphone)
+- [Efeitos](https://klebertiko.github.io/NightwolfRGB/#efeitos): live effects console
 - [Cenas](https://klebertiko.github.io/NightwolfRGB/#cenas): Nightwolf scene vs native OpenRGB `.orp` profile
+
+Explorar (catalog) and Biblioteca (installed) ship in the desktop app; see [ADR 0001](./adr/0001-three-surface-effects-ia.md).
 
 ## Notes for agents
 

@@ -21,6 +21,7 @@ const SKIP_DIR = new Set([
     '.gauntlet',
     '.cache',
     '.harness',
+    '.superpowers',
 ]);
 
 const SKIP_FILE = new Set(['.env', '.env.local']);
