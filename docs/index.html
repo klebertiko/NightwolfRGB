@@ -75,8 +75,8 @@
     /* Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V5 */
     :root {
       --paper: #0c0b0a;
-      --panel: #141210;
-      --inset: #1c1a17;
+      --panel: #1a1713;
+      --inset: #242018;
       --live: #ff4d8d;
       --ink: #f3ead8;
       --ink-mute: color-mix(in srgb, var(--ink) 62%, var(--paper));
@@ -171,9 +171,8 @@
     .spot {
       position: fixed;
       inset: 0;
-      z-index: 5;
+      z-index: 0;
       pointer-events: none;
-      mix-blend-mode: screen;
       background: radial-gradient(
         36rem circle at var(--spot-x) var(--spot-y),
         color-mix(in srgb, var(--live) 26%, transparent),
@@ -303,23 +302,38 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 0.5rem;
       flex-shrink: 0;
       min-height: 2.25rem;
-      padding: 0 0.85rem;
+      padding: 0 0.9rem 0 0.7rem;
       border: 0;
       border-radius: 0;
-      background: var(--ink);
-      color: var(--paper);
+      background: var(--inset);
+      color: var(--ink);
+      box-shadow:
+        inset 2px 0 0 var(--live),
+        0 0 0 1px color-mix(in srgb, var(--live) 38%, transparent);
       text-decoration: none;
-      font-family: inherit;
+      font-family: var(--font-sans);
       font-size: 0.875rem;
       font-weight: 500;
       white-space: nowrap;
       cursor: pointer;
     }
 
+    .cta::before {
+      content: "";
+      width: 2px;
+      height: 0.7em;
+      background: var(--live);
+      flex-shrink: 0;
+    }
+
     .cta:active {
-      background: var(--ink-mute);
+      background: var(--panel);
+      box-shadow:
+        inset 2px 0 0 var(--live),
+        inset 0 1px 0 rgb(0 0 0 / 0.4);
     }
 
     .mast__toggle {
@@ -440,12 +454,18 @@
       }
 
       .cta {
-        transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+        transition:
+          background-color var(--dur-micro) var(--ease-out),
+          color var(--dur-micro) var(--ease-out),
+          box-shadow var(--dur-micro) var(--ease-out);
       }
 
       .cta:hover {
-        background: var(--live);
-        color: var(--paper);
+        background: color-mix(in srgb, var(--live) 16%, var(--inset));
+        color: var(--ink);
+        box-shadow:
+          inset 2px 0 0 var(--live),
+          0 0 0 1px var(--live);
       }
 
       .mast__toggle:hover,
@@ -544,11 +564,11 @@
     }
 
     .band--panel {
-      background: var(--panel);
+      background-color: color-mix(in srgb, var(--panel) 78%, transparent);
     }
 
     .band--inset {
-      background: var(--inset);
+      background-color: color-mix(in srgb, var(--inset) 78%, transparent);
     }
 
     .js .reveal {
@@ -803,6 +823,8 @@
 
     /* Ft5 */
     .foot-stmt {
+      position: relative;
+      z-index: 1;
       padding: var(--space-2xl) 0 calc(var(--space-xl) + env(safe-area-inset-bottom));
     }
 
@@ -1050,8 +1072,6 @@
         <h2 id="clean-title">Mate o que conflita. O SDK precisa do hardware livre.</h2>
         <p>A Limpeza varre processos RGB que brigam pela mesma placa e conflitam com o OpenRGB. Detecta iCUE, Armoury Crate, Aura, Synapse, Mystic Light, CAM, RGB Fusion, Polychrome, SignalRGB, G HUB, SteelSeries GG, NGENUITY e afins. Lista pelo nome o que está rodando. Fecha só o que você pede — e só quando você manda.</p>
       </div>
-    </section>
-
     </section>
 
     <section class="involved reveal" aria-labelledby="involved-title">
