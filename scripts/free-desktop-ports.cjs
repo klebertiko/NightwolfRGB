@@ -39,12 +39,18 @@ function killPid(pid) {
 /**
  * Kills any LISTENING process on Nightwolf ports (5173/3001/6742) whose
  * image name is in the allow-list for that port.  Never touches Cursor.
+ * @param {{ excludePids?: number[] }} [opts]
  * @returns {number} count of pids killed
  */
-function freePorts() {
+function freePorts(opts = {}) {
+    const exclude = new Set((opts.excludePids || []).map(Number));
     let killed = 0;
     for (const target of KILL_TARGETS) {
         for (const pid of listeningPids(target.port)) {
+            if (exclude.has(pid)) {
+                console.log(`skip pid ${pid} (exclude) on :${target.port}`);
+                continue;
+            }
             const name = imageName(pid);
             if (!target.names.has(name)) {
                 console.log(`skip pid ${pid} (${name || 'unknown'}) on :${target.port}`);

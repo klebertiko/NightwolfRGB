@@ -1,10 +1,20 @@
 import { RGBColor, hexToRgb, hslToRgb } from '../utils/color.utils';
 import openrgb from './openrgb.controller';
+import layout from './layout.controller';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { engine } = require('../../scripts/lighting-engine.cjs') as { engine: any };
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const canvasLayout = require('../../scripts/canvas-layout.cjs') as {
+    paintCanvasFrame: (
+        layout: any,
+        timeMs: number,
+        speed?: number,
+    ) => Array<{ id: string; colors: RGBColor[] }>;
+    ledNormFromZones: (zones: any[]) => Record<number, { nx: number; ny: number }>;
+};
 
-type EffectType = 'static' | 'breathing' | 'rainbow' | 'spectrum' | 'strobing' | 'custom';
+type EffectType = 'static' | 'breathing' | 'rainbow' | 'spectrum' | 'strobing' | 'custom' | 'canvas-wave';
 
 interface EffectOptions {
     speed?: number; // 1-100
@@ -97,6 +107,11 @@ class EffectsEngine {
         const time = Date.now() - (this.currentEffect?.startTime || 0);
         const speed = (options.speed || 50) / 50;
 
+        if (type === 'canvas-wave') {
+            await this.applyCanvasWave(time, speed);
+            return;
+        }
+
         const spatial = type === 'rainbow' || type === 'spectrum';
         if (spatial) {
             const period = (type === 'spectrum' ? 10000 : 5000) / speed;
@@ -144,6 +159,32 @@ class EffectsEngine {
             const n = this.paintableCount(device);
             if (n === 0) continue;
             const colors = Array.from({ length: n }, (_, i) => fn(i, n));
+            await openrgb.updateLeds(device.id, colors);
+        }
+    }
+
+    /** Sample a shared canvas so waves flow continuously across placed devices. */
+    private async applyCanvasWave(timeMs: number, speed: number) {
+        const live = this.devices.map((d) => ({
+            id: d.id,
+            name: d.name,
+            ledCount: this.paintableCount(d),
+        }));
+        const map = await layout.getOrAuto(live);
+        const withNorm = {
+            ...map,
+            devices: (map.devices || []).map((p: any) => {
+                const device = this.devices.find((d) => String(d.id) === String(p.id));
+                const ledNorm = canvasLayout.ledNormFromZones(device?.zones || []);
+                return Object.keys(ledNorm).length ? { ...p, ledNorm } : p;
+            }),
+        };
+        const frames = canvasLayout.paintCanvasFrame(withNorm, timeMs, speed);
+        const byId = new Map(frames.map((f) => [String(f.id), f.colors]));
+
+        for (const device of this.devices) {
+            const colors = byId.get(String(device.id));
+            if (!colors?.length) continue;
             await openrgb.updateLeds(device.id, colors);
         }
     }
@@ -203,6 +244,7 @@ class EffectsEngine {
             options: this.currentEffect?.options,
             engine: 'nightwolf-direct',
             audio: false,
+            canvas: this.currentEffect?.type === 'canvas-wave',
         };
     }
 }

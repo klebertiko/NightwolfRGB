@@ -14,6 +14,7 @@ import profilesRoutes from './routes/profiles.routes';
 import openrgbProfilesRoutes from './routes/openrgb-profiles.routes';
 import cleanupRoutes from './routes/cleanup.routes';
 import effectsRoutes from './routes/effects.routes';
+import layoutRoutes from './routes/layout.routes';
 import pluginsRoutes from './routes/plugins.routes';
 import updateRoutes from './routes/update.routes';
 
@@ -93,6 +94,7 @@ app.use('/api/profiles', profilesRoutes);
 app.use('/api/openrgb-profiles', openrgbProfilesRoutes);
 app.use('/api/cleanup', cleanupRoutes);
 app.use('/api/effects', effectsRoutes);
+app.use('/api/layout', layoutRoutes);
 app.use('/api/plugins', pluginsRoutes);
 app.use('/api/update', updateRoutes(launcher, broadcast));
 

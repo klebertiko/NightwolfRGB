@@ -108,6 +108,13 @@ export const api = {
         apiClient.post('/api/effects/start', { type, options }),
     stopEffect: () => apiClient.post('/api/effects/stop'),
 
+    // ── Canvas layout (spatial mapping) ───────────────────────────────────────
+    getLayout: () => apiClient.get('/api/layout'),
+    saveLayout: (layout: unknown) => apiClient.put('/api/layout', layout),
+    autoLayout: () => apiClient.post('/api/layout/auto'),
+    nudgeLayoutDevice: (deviceId: string | number, dx: number, dy: number) =>
+        apiClient.post('/api/layout/nudge', { deviceId, dx, dy }),
+
     // ── Plugins (SDK 200/201 — loaded in OpenRGB, not a store) ────────────────
     getPlugins: () => apiClient.get('/api/plugins'),
     getPluginEffects: () => apiClient.get('/api/plugins/effects'),

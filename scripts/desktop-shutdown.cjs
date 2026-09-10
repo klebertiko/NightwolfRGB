@@ -13,11 +13,15 @@
 
 /**
  * Ports and allowed process names for Nightwolf port cleanup.
- * NEVER includes Cursor, browsers, or any other GUI process.
+ * NEVER includes Cursor, browsers, or any other GUI client.
+ *
+ * 5173/3001 also allow electron.exe — Vite/backend may be spawned via
+ * ELECTRON_RUN_AS_NODE (process name stays Electron). freePorts must still
+ * never kill the main BrowserWindow PID (caller passes excludePids).
  */
 const KILL_TARGETS = [
-    { port: 5173, names: new Set(['node', 'node.exe']) },
-    { port: 3001, names: new Set(['node', 'node.exe']) },
+    { port: 5173, names: new Set(['node', 'node.exe', 'electron', 'electron.exe']) },
+    { port: 3001, names: new Set(['node', 'node.exe', 'electron', 'electron.exe']) },
     { port: 6742, names: new Set(['openrgb', 'openrgb.exe']) },
 ];
 
@@ -64,18 +68,18 @@ function parseListeningPids(netstatOutput, port) {
  * Shuts down the Nightwolf desktop cleanly.
  *
  * Steps:
- *   1. Kill the backend process tree (Windows: taskkill /PID … /T /F).
- *      The backend is spawned with `shell: true` so its pid is cmd.exe;
- *      /T propagates the kill to all grandchildren (Vite, OpenRGB via npm).
- *   2. Call freePorts() to release leftover LISTENING sockets.
- *   3. Call exit(0) — never returns.
+ *   1. Kill each service process tree (backend, Vite, …) via taskkill /T /F.
+ *   2. freePorts() reaps any leftover LISTENING sockets (zombies).
+ *   3. exit(0) — never returns.
  *
  * @param {{
- *   backendPid: number|null,
+ *   servicePids?: Array<number|null|undefined>,
+ *   backendPid?: number|null,
  *   spawn: (cmd: string, args: string[], opts: object) => import('child_process').ChildProcess,
  *   exit: (code: number) => void,
- *   freePorts: () => Promise<void>|void,
- *   killTimeoutMs?: number
+ *   freePorts: (opts?: { excludePids?: number[] }) => Promise<void>|void,
+ *   killTimeoutMs?: number,
+ *   excludePids?: number[],
  * }} opts
  */
 const DEFAULT_KILL_TIMEOUT_MS = 4000;
@@ -94,9 +98,24 @@ function waitForCloseOrTimeout(child, ms) {
     });
 }
 
-async function quitDesktop({ backendPid, spawn, exit, freePorts, killTimeoutMs = DEFAULT_KILL_TIMEOUT_MS }) {
-    if (backendPid) {
-        const { cmd, args } = killTreeArgs(backendPid);
+async function quitDesktop({
+    servicePids,
+    backendPid = null,
+    spawn,
+    exit,
+    freePorts,
+    killTimeoutMs = DEFAULT_KILL_TIMEOUT_MS,
+    excludePids = [],
+}) {
+    const pids = [
+        ...new Set(
+            [...(servicePids || []), backendPid]
+                .filter((pid) => typeof pid === 'number' && pid > 0),
+        ),
+    ];
+
+    for (const pid of pids) {
+        const { cmd, args } = killTreeArgs(pid);
         const child = spawn(cmd, args, {
             windowsHide: true,
             stdio: 'ignore',
@@ -107,7 +126,7 @@ async function quitDesktop({ backendPid, spawn, exit, freePorts, killTimeoutMs =
 
     try {
         await Promise.race([
-            Promise.resolve(freePorts()),
+            Promise.resolve(freePorts({ excludePids })),
             new Promise((resolve) => setTimeout(resolve, killTimeoutMs)),
         ]);
     } catch (err) {

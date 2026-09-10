@@ -197,15 +197,22 @@ test('Limpeza catalog has 63 named Windows RGB processes', () => {
 });
 
 test('Efeitos are named in pt-BR and do not fake audio capture', () => {
+    const catalog = read('frontend/src/lib/installedLibrary.ts');
+    assert.match(catalog, /Respirar/);
+    assert.match(catalog, /Arco-íris/);
+    const workbench = read('frontend/src/components/EffectWorkbench.tsx');
+    assert.match(workbench, /Velocidade/);
+    const discover = read('frontend/src/components/DiscoverView.tsx');
+    assert.match(discover, /Catálogo honesto|guarda na Biblioteca/);
+    assert.equal(discover.includes('Math.random'), false);
+    const preview = read('frontend/src/components/EffectPreview.tsx');
+    assert.equal(preview.includes('Math.random'), false);
+    assert.equal(preview.includes('Áudio inativo'), false);
     const panel = read('frontend/src/components/EffectsPanel.tsx');
-    assert.match(panel, /Respirar/);
-    assert.match(panel, /Arco-íris/);
-    assert.match(panel, /Velocidade/);
-    assert.match(panel, /sem áudio/);
-    assert.match(panel, /Não há loja de plugins/);
+    assert.match(panel, /EffectWorkbench/);
     const app = read('frontend/src/App.tsx');
-    assert.match(app, /EffectPreview/);
-    assert.match(app, /sem captura de áudio/);
+    assert.match(app, /DiscoverView/);
+    assert.match(app, /EffectsPanel/);
     assert.equal(app.includes('Áudio inativo'), false);
     assert.equal(app.includes('Math.random'), false);
     const fx = read('backend/controllers/effects.controller.ts');
@@ -213,9 +220,9 @@ test('Efeitos are named in pt-BR and do not fake audio capture', () => {
     assert.match(fx, /audio: false/);
 });
 
-test('operator chrome: keyboard 1–4 / Ctrl+K and OpenRGB port honesty', () => {
+test('operator chrome: keyboard 1–6 / Ctrl+K and OpenRGB port honesty', () => {
     const app = read('frontend/src/App.tsx');
-    assert.match(app, /e\.key >= '1' && e\.key <= '4'/);
+    assert.match(app, /e\.key >= '1' && e\.key <= '6'/);
     assert.match(app, /toLowerCase\(\) === 'k'/);
     const bar = read('frontend/src/components/StatusBar.tsx');
     assert.match(bar, /OpenRGB :/);
@@ -223,7 +230,7 @@ test('operator chrome: keyboard 1–4 / Ctrl+K and OpenRGB port honesty', () => 
     const chassis = read('frontend/src/components/ChassisGhost.tsx');
     assert.match(chassis, /fills/);
     const overlay = read('frontend/src/components/ShortcutOverlay.tsx');
-    assert.match(overlay, /1–4/);
+    assert.match(overlay, /1–6/);
     assert.match(overlay, /Ctrl\+K/);
 });
 

@@ -273,3 +273,21 @@ export interface ApplyProfileResult {
     engine: EngineState;
     results?: unknown;
 }
+
+/** Spatial canvas layout — devices occupy rectangles on a shared 2D surface. */
+export interface CanvasDevicePlacement {
+    id: string;
+    name: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    ledCount: number;
+}
+
+export interface CanvasLayout {
+    canvasWidth: number;
+    canvasHeight: number;
+    devices: CanvasDevicePlacement[];
+    updatedAt?: string;
+}

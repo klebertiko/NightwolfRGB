@@ -43,6 +43,7 @@ run('compile:frontend', npm, ['run', 'build'], path.join(root, 'frontend'));
 
 const tests = [
     'scripts/lighting-engine.test.cjs',
+    'scripts/canvas-layout.test.cjs',
     'scripts/type-roles.test.cjs',
     'scripts/chrome-ia.test.cjs',
     'scripts/openrgb-parity.test.cjs',

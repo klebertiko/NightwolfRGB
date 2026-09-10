@@ -3,7 +3,7 @@ import React from 'react';
 export const ShortcutOverlay: React.FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
     if (!open) return null;
     const rows = [
-        ['1–4', 'Studio / Luz / Efeitos / Cenas'],
+        ['1–6', 'Studio / Luz / Explorar / Efeitos / Biblioteca / Cenas'],
         ['Ctrl+K', 'Buscar (Redigitalizar)'],
         ['Ctrl+S', 'Salvar cena'],
         ['Esc', 'Fechar painel'],
